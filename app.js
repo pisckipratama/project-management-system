@@ -41,6 +41,10 @@ app.use(session({
   secret: 'aplikasiaingkumahaaing'
 }))
 app.use(flash());
+app.use(function (req, res, next) {
+  res.set('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
+  next();
+});
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
