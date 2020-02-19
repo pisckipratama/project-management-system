@@ -23,7 +23,7 @@ const pool = new Pool({
 // setup routes
 const indexRouter = require('./routes/index')(pool);
 const usersRouter = require('./routes/users');
-const projectRouter = require('./routes/project');
+const projectRouter = require('./routes/project')(pool);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

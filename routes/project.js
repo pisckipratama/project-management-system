@@ -9,13 +9,27 @@ const isLoggedIn = (req, res, next) => {
   }
 }
 
-/* GET home page. */
-router.get('/', isLoggedIn, function(req, res, next) {
-  res.render('project/list', { title: 'Dashboard PMS' });
-});
+module.exports = (pool) => {
+  router.get('/', isLoggedIn, function (req, res, next) {
+    console.log(req.session.user)
+    res.render('project/list', {
+      title: 'Dashboard PMS',
+      user: req.session.user
+    });
+  });
 
-router.get('/profile', function(req, res, next) {
-  res.render('project/profile', { title: 'Dashboard PMS' });
-});
-
-module.exports = router;
+  router.get('/profile/:id', function (req, res, next) {
+    const id = req.params.id;
+    let sqlLoad = `SELECT * FROM users WHERE userid=${id}`;
+    console.log(sqlLoad)
+    pool.query(sqlLoad, (err, data) => {
+      if (err) res.status(500).json(err)
+      res.render('project/profile', {
+        title: 'Dashboard PMS',
+        result: data.rows[0],
+        user: req.session.user
+      });
+    })
+  });
+  return router
+};
