@@ -1,17 +1,48 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
+const bodyParser = require('body-parser');
 
-/* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('login', { title: 'Project Management System' });
-});
+router.use(bodyParser.urlencoded({
+  extended: false
+}));
+router.use(bodyParser.json())
 
-router.post('/', function(req, res, next) {
-  res.redirect('/project');
-});
+module.exports = pool => {
+  router.get('/', (req, res, next) => {
+    res.render('login', {
+      title: 'Project Management System',
+      loginMessage: req.flash('loginMessage')
+    });
+  });
 
-router.get('/logout', function (req, res, next) {
-  res.redirect('/');
-});
+  router.post('/', (req, res, next) => {
+    const { email, password } = req.body;
+    let sqlLoad = `SELECT * FROM users`;
+    pool.query(sqlLoad, (err, data) => {
+      if (err) res.status(500).send(err)
+      let result = data.rows.map(item => item)
+      
+      for (const property in result) {
+        if (email === result[property].email) {
+          if (password === result[property].password) {
+            req.session.user = result[property]
+            return res.redirect('/project')
+          } else {
+            req.flash('loginMessage', 'wrong password.')
+            return res.redirect('/')
+          }
+        }
+      }
+      req.flash('loginMessage', 'wrong or username not found.')
+      res.redirect('/')      
+    })
+  });
 
-module.exports = router;
+  router.get('/logout', (req, res, next) => {
+    req.session.destroy(function (err) {
+      return res.redirect('/');
+    })
+  });
+
+  return router
+};
