@@ -11,11 +11,16 @@ const isLoggedIn = (req, res, next) => {
 
 module.exports = (pool) => {
   router.get('/', isLoggedIn, function (req, res, next) {
-    console.log(req.session.user)
-    res.render('project/list', {
-      title: 'Dashboard PMS',
-      user: req.session.user
-    });
+    let sqlGet = `SELECT * FROM projects`
+    pool.query(sqlGet, (err, data) => {
+      if (err) res.status(500).json(err)
+      let result = data.rows.map(item => item)
+      res.render('project/list', {
+        title: 'Dashboard PMS',
+        user: req.session.user,
+        result
+      });
+    })
   });
 
   router.get('/profile/:id', function (req, res, next) {

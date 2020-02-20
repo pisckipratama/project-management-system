@@ -69,38 +69,20 @@
       <tr>
         <th scope="col">#</th>
         <th scope="col">Name</th>
-        <th scope="col">Member</th>
         <th scope="col">Action</th>
       </tr>
     </thead>
     <tbody>
+      <% result.forEach((element, index) => { %>
       <tr>
-        <th scope="row">1</th>
-        <td>Library System</td>
-        <td>Piscki</td>
+        <th scope="row"><%= element.projectid %></th>
+        <td><%= element.name %></td>
         <td>
           <a class="btn btn-success btn-sm" href="" role="button">Edit</a>
           <a class="btn btn-danger btn-sm" href="" role="button">Delete</a>
         </td>
       </tr>
-      <tr>
-        <th scope="row">2</th>
-        <td>LMS</td>
-        <td>Rendi</td>
-        <td>
-          <a class="btn btn-success btn-sm" href="" role="button">Edit</a>
-          <a class="btn btn-danger btn-sm" href="" role="button">Delete</a>
-        </td>
-      </tr>
-      <tr>
-        <th scope="row">3</th>
-        <td>University System</td>
-        <td>Fauzan</td>
-        <td>
-          <a class="btn btn-success btn-sm" href="" role="button">Edit</a>
-          <a class="btn btn-danger btn-sm" href="" role="button">Delete</a>
-        </td>
-      </tr>
+      <% }) %>
     </tbody>
   </table>
   <a class="btn btn-primary" href="/project/add" role="button">Add</a>
