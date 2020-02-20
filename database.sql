@@ -2,7 +2,7 @@
 CREATE TABLE users(
   userid SERIAL PRIMARY KEY,
   email VARCHAR(30),
-  password VARCHAR,
+  password VARCHAR(100),
   firstname VARCHAR(30),
   lastame VARCHAR(30)
 );
@@ -10,52 +10,43 @@ CREATE TABLE users(
 -- ** table project **
 CREATE TABLE projects(
   projectid SERIAL PRIMARY KEY,
-  name VARCHAR
+  name VARCHAR(100)
 );
 
 -- ** table members **
 
--- /* untuk membuat type data enum */
--- create type roles as enum ('manager','programmer','quality assurance');
-
 CREATE TABLE members(
   id SERIAL PRIMARY KEY,
-  role roles,
-  userid SERIAL,
-  projectid SERIAL,
+  role VARCHAR(20),
+  userid INT,
+  projectid INT,
   FOREIGN KEY (userid) REFERENCES users(userid),
   FOREIGN KEY (projectid) REFERENCES projects(projectid)
 );
 
 -- ** table issues **
 
--- /* untuk membuat type data enum */
--- create type trackers as enum ('bug','feature','support');
--- create type statuses as enum ('New','In Progress','Resolved','Feedback','Closed','Rejected');
--- create type priorities as enum ('New','In Progress','Resolved','Feedback','Closed','Rejected');
-
 CREATE TABLE issues(
   issueid SERIAL PRIMARY KEY,
-  tracker trackers,
-  subject VARCHAR,
-  description VARCHAR,
-  status statuses,
-  priority priorities,
+  projectid INT,
+  tracker VARCHAR(10),
+  subject VARCHAR(30),
+  description TEXT,
+  status VARCHAR(20),
+  priority VARCHAR(15),
   assignee INT,
-  startdate TIMESTAMP,
+  startdate DATE,
   duedate DATE,
-  estimatedate TIMESTAMP,
-  done TIMESTAMP,
-  files BYTEA,
-  spenttime TIME,
-  targetversion VARCHAR,
+  estimatedate REAL,
+  done INT,
+  files VARCHAR(100),
+  spenttime REAL,
+  targetversion VARCHAR(100),
   author INT,
   createdate TIMESTAMP,
   updatedate TIMESTAMP,
   closedate TIMESTAMP,
   parenttask INT,
-  userid SERIAL,
-  projectid SERIAL,
   FOREIGN KEY (userid) REFERENCES users(userid),
   FOREIGN KEY (projectid) REFERENCES projects(projectid)
 );
@@ -63,8 +54,8 @@ CREATE TABLE issues(
 -- ** table activity **
 CREATE TABLE activity(
   activityid SERIAL PRIMARY KEY,
-  time TIME,
-  title VARCHAR,
-  description VARCHAR,
-  author VARCHAR
+  time TIMESTAMP,
+  title VARCHAR(50),
+  description TEXT,
+  author VARCHAR(50)
 )
