@@ -6,12 +6,14 @@ module.exports = (pool) => {
 
   // to get data with id
   router.get('/:id', function (req, res, next) {
+    console.log(req.headers.host)
     const id = req.params.id;
     let sqlLoad = `SELECT * FROM users WHERE userid=${id}`;
     console.log(sqlLoad)
     pool.query(sqlLoad, (err, data) => {
       if (err) res.status(500).json(err)
       res.render('profile/list', {
+        url: 'profile',
         title: 'Dashboard PMS',
         result: data.rows[0],
         user: req.session.user
