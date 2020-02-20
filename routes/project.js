@@ -1,6 +1,8 @@
+// import depedencies
 const express = require('express');
 const router = express.Router();
 
+// cofigure middleware for session
 const isLoggedIn = (req, res, next) => {
   if (req.session.user) {
     next()
@@ -9,6 +11,7 @@ const isLoggedIn = (req, res, next) => {
   }
 }
 
+// to landing profile
 module.exports = (pool) => {
   router.get('/', isLoggedIn, function (req, res, next) {
     let sqlGet = `SELECT * FROM projects`
@@ -23,6 +26,7 @@ module.exports = (pool) => {
     })
   });
 
+  // to get data with id
   router.get('/profile/:id', function (req, res, next) {
     const id = req.params.id;
     let sqlLoad = `SELECT * FROM users WHERE userid=${id}`;
@@ -37,6 +41,26 @@ module.exports = (pool) => {
     })
   });
 
+  // to update profile user
+  router.post('/profile/:id', (req, res, next) => {
+    const id = req.params.id;
+    const { inputPassword, inputLastName, inputFirstName } = req.body;
+    console.log(req.body)
+    let sqlEdit = `UPDATE users SET password='${inputPassword}' WHERE userid=${id}`
+    console.log(sqlEdit);
+
+    if (!inputPassword) {
+      return res.redirect('/project')
+    }
+
+    pool.query(sqlEdit, (err, data) => {
+      if (err) return res.status(500).send(err)
+      res.redirect('/project')
+    })
+
+  })
+
+  // to add page
   router.get('/add', isLoggedIn, function (req, res, next) {
     console.log(req.session.user)
     res.render('project/add', {
@@ -45,6 +69,7 @@ module.exports = (pool) => {
     });
   });
 
+  // masih progress a.k.a belum selesei
   router.post('/add', function (req, res, next) {
     const id = req.params.id;
     let sqlLoad = `SELECT * FROM users WHERE userid=${id}`;

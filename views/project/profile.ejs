@@ -6,7 +6,7 @@
   <hr>
 
   <div class="container">
-    <form method="PUT" action="">
+    <form method="POST" action="">
       <div class="form-group row">
         <label for="inputEmail" class="col-sm-2 col-form-label">Email</label>
         <div class="col-sm-10">
@@ -19,20 +19,38 @@
           <input type="password" class="form-control" name="inputPassword" placeholder="Password">
         </div>
       </div>
+
+      <div class="form-group row">
+        <label for="inputFirstName" class="col-sm-2 col-form-label">First Name</label>
+        <div class="col-sm-10">
+          <input type="text" class="form-control" name="inputFirstName" value="<%= result.firstname %>">
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <label for="inputLastName" class="col-sm-2 col-form-label">Last Name</label>
+        <div class="col-sm-10">
+          <input type="text" class="form-control" name="inputLastName" value="<%= result.lastname %>">
+        </div>
+      </div>
+
       <fieldset class="form-group">
         <div class="row">
           <legend class="col-form-label col-sm-2 pt-0">Position</legend>
           <div class="col-sm-10">
             <div class="custom-control custom-radio">
-              <input type="radio" id="position1" name="radioPosition" class="custom-control-input">
+              <input type="radio" id="position1" name="radioPosition" value="Manager" class="custom-control-input"
+                <%= result.position == 'Manager' ? 'checked' : '' %>>
               <label class="custom-control-label" for="position1">Manager</label>
             </div>
             <div class="custom-control custom-radio">
-              <input type="radio" id="position2" name="radioPosition" class="custom-control-input">
+              <input type="radio" id="position2" name="radioPosition" value="Software Developer"  class="custom-control-input"
+                <%= result.position == 'Software Developer' ? 'checked' : '' %>>
               <label class="custom-control-label" for="position2">Software Developer</label>
             </div>
             <div class="custom-control custom-radio">
-              <input type="radio" id="position3" name="radioPosition" class="custom-control-input">
+              <input type="radio" id="position3" name="radioPosition" value="Quality Assurance" class="custom-control-input"
+                <%= result.position == 'Quality Assurance' ? 'checked' : '' %>>
               <label class="custom-control-label" for="position3">Quality Assurance</label>
             </div>
           </div>
@@ -44,11 +62,13 @@
           <legend class="col-form-label col-sm-2 pt-0">Type</legend>
           <div class="col-sm-10">
             <div class="custom-control custom-radio">
-              <input type="radio" id="type1" name="radioType" class="custom-control-input">
+              <input type="radio" id="type1" name="radioType" value="Full Time" class="custom-control-input"
+                <%= result.jobtype == 'Full Time' ? 'checked' : '' %>>
               <label class="custom-control-label" for="type1">Full Time</label>
             </div>
             <div class="custom-control custom-radio">
-              <input type="radio" id="type2" name="radioType" class="custom-control-input">
+              <input type="radio" id="type2" name="radioType" value="Part Time" class="custom-control-input"
+                <%= result.jobtype == 'Part Time' ? 'checked' : '' %>>
               <label class="custom-control-label" for="type2">Part Time</label>
             </div>
           </div>
@@ -59,6 +79,7 @@
       <div class="form-group row">
         <div class="col-sm-10">
           <button type="submit" class="btn btn-primary">Update</button>
+          <a class="btn btn-warning" href="/project/" role="button">Back</a>
         </div>
       </div>
     </form>
