@@ -43,15 +43,17 @@ module.exports = (pool) => {
 
   // to update profile user
   router.post('/profile/:id', (req, res, next) => {
-    const id = req.params.id;
-    const { inputPassword, inputLastName, inputFirstName } = req.body;
-    console.log(req.body)
-    let sqlEdit = `UPDATE users SET password='${inputPassword}' WHERE userid=${id}`
-    console.log(sqlEdit);
+    const { inputEmail, inputPassword, inputLastName, inputFirstName, inputPosition, inputType } = req.body;
+    let sqlEdit = ''
+    console.log('Pertama > ' + sqlEdit);
 
     if (!inputPassword) {
-      return res.redirect('/project')
+      sqlEdit = `UPDATE users SET firstname='${inputFirstName}', lastname='${inputLastName}', position='${inputPosition}', jobtype='${inputType}' WHERE email='${inputEmail}'`
+    } else {
+      sqlEdit = `UPDATE users SET firstname='${inputFirstName}', lastname='${inputLastName}', position='${inputPosition}', jobtype='${inputType}', password='${inputPassword}' WHERE email='${inputEmail}'`;
     }
+
+    console.log('Kedua > ' + sqlEdit)
 
     pool.query(sqlEdit, (err, data) => {
       if (err) return res.status(500).send(err)
