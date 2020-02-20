@@ -6,7 +6,7 @@
   <hr>
 
   <div class="container">
-    <form method="POST">
+    <form method="PUT" action="">
       <div class="form-group row">
         <label for="inputEmail" class="col-sm-2 col-form-label">Email</label>
         <div class="col-sm-10">
@@ -24,37 +24,38 @@
           <legend class="col-form-label col-sm-2 pt-0">Position</legend>
           <div class="col-sm-10">
             <div class="custom-control custom-radio">
-              <input type="radio" id="radio1" name="radioPosition" class="custom-control-input">
-              <label class="custom-control-label" for="radio1">Manager</label>
+              <input type="radio" id="position1" name="radioPosition" class="custom-control-input">
+              <label class="custom-control-label" for="position1">Manager</label>
             </div>
             <div class="custom-control custom-radio">
-              <input type="radio" id="radio2" name="radioPosition" class="custom-control-input">
-              <label class="custom-control-label" for="radio2">Software Developer</label>
+              <input type="radio" id="position2" name="radioPosition" class="custom-control-input">
+              <label class="custom-control-label" for="position2">Software Developer</label>
             </div>
             <div class="custom-control custom-radio">
-              <input type="radio" id="radio3" name="radioPosition" class="custom-control-input">
-              <label class="custom-control-label" for="radio3">Quality Assurance</label>
+              <input type="radio" id="position3" name="radioPosition" class="custom-control-input">
+              <label class="custom-control-label" for="position3">Quality Assurance</label>
             </div>
           </div>
         </div>
       </fieldset>
-      <div class="form-group row">
-        <div class="col-sm-2">Type</div>
-        <div class="col-sm-10">
-          <div class="form-check">
-            <input class="form-check-input" type="checkbox" id="gridCheck1">
-            <label class="form-check-label" for="gridCheck1">
-              Fulltime
-            </label>
-          </div>
-          <div class="form-check">
-            <input class="form-check-input" type="checkbox" id="gridCheck1">
-            <label class="form-check-label" for="gridCheck1">
-              Part Time
-            </label>
+
+      <fieldset class="form-group">
+        <div class="row">
+          <legend class="col-form-label col-sm-2 pt-0">Type</legend>
+          <div class="col-sm-10">
+            <div class="custom-control custom-radio">
+              <input type="radio" id="type1" name="radioType" class="custom-control-input">
+              <label class="custom-control-label" for="type1">Full Time</label>
+            </div>
+            <div class="custom-control custom-radio">
+              <input type="radio" id="type2" name="radioType" class="custom-control-input">
+              <label class="custom-control-label" for="type2">Part Time</label>
+            </div>
           </div>
         </div>
-      </div>
+      </fieldset>
+
+
       <div class="form-group row">
         <div class="col-sm-10">
           <button type="submit" class="btn btn-primary">Update</button>
