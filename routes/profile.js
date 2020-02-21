@@ -4,25 +4,21 @@ const router = express.Router();
 
 module.exports = (pool) => {
 
-  // to get data with id
-  router.get('/:id', function (req, res, next) {
-    console.log(req.headers.host)
-    const id = req.params.id;
-    let sqlLoad = `SELECT * FROM users WHERE userid=${id}`;
-    console.log(sqlLoad)
-    pool.query(sqlLoad, (err, data) => {
-      if (err) res.status(500).json(err)
-      res.render('profile/list', {
-        url: 'profile',
-        title: 'Dashboard PMS',
-        result: data.rows[0],
-        user: req.session.user
-      });
+  // edit profile user
+  router.get('/', function (req, res, next) {
+    // console.log(req.headers.host)
+    // const id = req.params.id;
+    let user = req.session.user;
+    console.log(user)
+    res.render('profile/list', {
+      url: 'profile',
+      title: 'Dashboard PMS',
+      user
     })
   });
 
   // to update profile user
-  router.post('/:id', (req, res, next) => {
+  router.post('/', (req, res, next) => {
     const {
       inputEmail,
       inputPassword,
