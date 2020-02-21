@@ -15,55 +15,64 @@
         </div>
       </div>
       <div class="form-group row">
-        <label for="inputString" class="col-sm-2 col-form-label"> <input type="checkbox" name="checkString">
+        <label for="inputName" class="col-sm-2 col-form-label"> <input type="checkbox" name="checkName">
           Name</label>
         <div class="col-sm-10">
-          <input type="text" class="form-control" name='inputString' placeholder="String">
+          <input type="text" class="form-control" name='inputName' placeholder="Name">
         </div>
       </div>
       <div class="form-group row">
         <label for="inputBoolean" class="col-sm-2 col-form-label"> <input type="checkbox" name="checkBoolean">
           Member</label>
         <div class="col-sm-10">
-          <select class="custom-select" name="inputBoolean">
-            <option value="false">false</option>
-            <option value="true" selected>true</option>
+          <select class="custom-select" name="inputMember">
+            <option disabled selected>Choose the member</option>
+            <% dataUser.forEach((element, index) => { %>
+            <option value="<%= element.email %>"><%= element.firstname %> <%= element.lastname %></option>
+            <% }) %>
           </select>
         </div>
       </div>
-      <button type="submit" class="btn btn-primary">Search</button>
-    </form>
   </div>
-  <br>
+  <div class="form-group row">
+    <div class="col-sm-10">
+      <button type="submit" class="btn btn" style="background-color: #321a75; color: #fff;">Search</button>
+    </div>
+  </div>
+  </form>
   <hr>
 
-  <form id="form-option" method="GET">
-    <h3>Options <small>columns</small></h3>
-    <div class="container">
-      <div class="form-check">
-        <input class="form-check-input" id="checkID" type="checkbox" name="checkID" value="id" checked>
-        <label class="form-check-label" for="checkID">
-          ID
-        </label>
-      </div>
-      <div class="form-check">
-        <input class="form-check-input" id="checkName" type="checkbox" name="checkName" value="name" checked>
-        <label class="form-check-label" for="checkName">
-          Name
-        </label>
-      </div>
-      <div class="form-check">
-        <input class="form-check-input" id="checkMember" type="checkbox" name="checkMember" value="member">
-        <label class="form-check-label" for="checkMember">
-          Member
-        </label>
+  <form>
+    <h3>Option</h3>
+    <div class="form-group row">
+      <div class="col-sm-2">Columns</div>
+      <div class="col-sm-10">
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" id="checkID" name="chkid" value="id">
+          <label class="form-check-label" for="checkID">
+            ID
+          </label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" id="checkName" name="chkname" value="name">
+          <label class="form-check-label" for="checkName">
+            Name
+          </label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" id="checkMember" name="chkmember" value="member">
+          <label class="form-check-label" for="checkMember">
+            Member
+          </label>
+        </div>
       </div>
     </div>
-    <br>
-    <button type="submit" class="btn btn-primary">Apply</button>
+    <div class="form-group row">
+      <div class="col-sm-10">
+        <button type="submit" class="btn btn" style="background-color: #321a75; color: #fff;">Apply</button>
+      </div>
+    </div>
   </form>
-  
-  <br> <br>
 
   <table class="table table-striped">
     <thead>
@@ -75,7 +84,7 @@
       </tr>
     </thead>
     <tbody>
-      <% result.forEach((element, index) => { %>
+      <% dataProject.forEach((element, index) => { %>
       <tr>
         <th scope="row"> <%= element.projectid %></th>
         <td><%= element.name %></td>
@@ -88,7 +97,7 @@
       <% }) %>
     </tbody>
   </table>
-  <a class="btn btn-primary" href="/project/add" role="button">Add</a>
+  <a class="btn" style="background-color: #321a75; color: #fff;" href="/project/add" role="button">Add</a>
   <hr>
 
   <%- include("../partials/_footer") %>

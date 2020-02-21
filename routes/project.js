@@ -14,19 +14,23 @@ const isLoggedIn = (req, res, next) => {
 module.exports = (pool) => {
   // to landing profile
   router.get('/', isLoggedIn, function (req, res, next) {
-    let sqlGet = `SELECT * FROM projects`;
+    let sqlGetProjects = `SELECT * FROM projects`;
+    let sqlGetUsers = `SELECT * FROM users`;
     const body = req.body;
-    console.log(body)
-    pool.query(sqlGet, (err, data) => {
+
+    pool.query(sqlGetProjects, (err, dataProject) => {
       if (err) res.status(500).json(err)
-      let result = data.rows.map(item => item)
-      res.render('project/list', {
-        title: 'Dashboard PMS',
-        url: 'project',
-        user: req.session.user,
-        result,
-        body
-      });
+      pool.query(sqlGetUsers, (err, dataUsers) => {
+        if (err) res.status(500).json(err)
+        res.render('project/list', {
+          title: 'Dashboard PMS',
+          url: 'project',
+          user: req.session.user,
+          body,
+          dataUser: dataUsers.rows.map(item => item),
+          dataProject: dataProject.rows.map(item => item)
+        });
+      })
     })
   });
 

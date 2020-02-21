@@ -1,11 +1,15 @@
 <%- include("_header") %>
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+<nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #321a75;">
+  <a class="navbar-brand" href="/project">
+    <img src="/images/computerwindows.svg" width="30" height="30" class="d-inline-block align-top"
+      alt="">
+    Project Management
+  </a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01"
     aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
   <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
-    <a class="navbar-brand" href="/project">Project Management System</a>
     <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
       <li class="nav-item <%= url == 'project' ? 'active' : '' %>">
         <a class="nav-link" href="/project">Projects</a>
@@ -14,6 +18,6 @@
         <a class="nav-link" href="/profile">Profile</a>
       </li>
     </ul>
-    <a class="btn btn-outline-success" href="/logout" role="button">Sign Out</a>
+    <a class="btn btn-light" href="/logout" role="button">Sign Out</a>
   </div>
 </nav>
