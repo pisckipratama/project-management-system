@@ -56,7 +56,7 @@ module.exports = (pool) => {
   });
 
   // masih progress a.k.a belum selesei
-  router.post('/add', function (req, res, next) {
+  router.post('/add', isLoggedIn, function (req, res, next) {
     const id = req.params.id;
     const body = req.body
     console.log(body)
@@ -71,6 +71,28 @@ module.exports = (pool) => {
       });
     })
   });
+
+  // edit data landing page
+  router.get('/edit/:projectid', isLoggedIn, (req, res, next) => {
+    const projectid = req.params.projectid;
+    let sqlEditProject = `SELECT * FROM projects WHERE projectid=${projectid}`;
+    let sqlEditUser = `SELECT * FROM users`;
+
+    pool.query(sqlEditProject, (err, dataProject) => {
+      if (err) res.status(500).json(err)
+      let result = dataProject.rows.map(item => item)
+      pool.query(sqlEditUser, (err, dataUser) => {
+        if (err) res.status(500).json(err);
+        res.render('project/edit', {
+          user: req.session.user,
+          url: 'project',
+          title: 'Dashboard PMS',
+          result: result[0],
+          dataUser: dataUser.rows.map(item => item)
+        });
+      })
+    })
+  })
 
   return router
 };

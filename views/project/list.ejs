@@ -90,8 +90,8 @@
         <td><%= element.name %></td>
         <td hidden> User <%= index + 1 %></td>
         <td>
-          <a class="btn btn-success btn-sm" href="" role="button">Edit</a>
-          <a class="btn btn-danger btn-sm" href="" role="button">Delete</a>
+          <a class="btn btn-success btn-sm" href="/project/edit/<%= element.projectid %>" role="button">Edit</a>
+          <a class="btn btn-danger btn-sm" href="/project/delete/<%= element.projectid %>" role="button">Delete</a>
         </td>
       </tr>
       <% }) %>
