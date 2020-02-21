@@ -91,7 +91,8 @@
         <td hidden> User <%= index + 1 %></td>
         <td>
           <a class="btn btn-success btn-sm" href="/project/edit/<%= element.projectid %>" role="button">Edit</a>
-          <a class="btn btn-danger btn-sm" href="/project/delete/<%= element.projectid %>" role="button">Delete</a>
+          <a class="btn btn-danger btn-sm delete" onclick="return confirm('Are you sure you want to delete this item?');"
+            href="/project/delete/<%= element.projectid %>">Delete</a>
         </td>
       </tr>
       <% }) %>

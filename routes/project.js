@@ -94,5 +94,15 @@ module.exports = (pool) => {
     })
   })
 
+  // delete project 
+  router.get('/delete/:projectid', isLoggedIn, (req, res, next) => {
+    const projectid = req.params.projectid;
+    let sqlEditProject = `DELETE FROM projects WHERE projectid=${projectid}`;
+
+    pool.query(sqlEditProject, (err) => {
+      if (err) res.status(500).json(err)
+      res.redirect('/project');
+    })
+  })
   return router
 };
