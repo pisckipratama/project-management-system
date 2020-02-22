@@ -17,6 +17,7 @@ module.exports = (pool) => {
     let sqlGetProjects = `SELECT * FROM projects`;
     let sqlGetUsers = `SELECT * FROM users`;
     const body = req.body;
+    console.log(body)
 
     pool.query(sqlGetProjects, (err, dataProject) => {
       if (err) res.status(500).json(err)
@@ -35,7 +36,8 @@ module.exports = (pool) => {
   });
 
   router.post('/', isLoggedIn, function (req, res, next) {
-    const body = req.body;
+    const { chkid, chkname, chkmember } = req.body;
+    console.log(chkid);
     res.redirect('/project')
   });
 
