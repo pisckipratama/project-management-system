@@ -19,10 +19,25 @@ module.exports = (pool) => {
     const body = req.body;
     console.log(body)
 
+    const { checkID, checkName, checkMember, inputID, inputName, inputMember } = req.query;
+    let content = [];
+
+    if (checkID && inputID) {
+      content.push = `projectid=${inputID}`
+    }
+    if (checkName && inputName) {
+      content.push = `name='${inputName}'`
+    }
+    if (checkMember && inputMember) {
+      content.push = `member='${inputMember}'`;
+    }
+
     pool.query(sqlGetProjects, (err, dataProject) => {
       if (err) res.status(500).json(err)
+      console.log(dataProject.rows)
       pool.query(sqlGetUsers, (err, dataUsers) => {
         if (err) res.status(500).json(err)
+        console.log(dataUsers.rows)
         res.render('project/list', {
           title: 'Dashboard PMS',
           url: 'project',
@@ -36,7 +51,11 @@ module.exports = (pool) => {
   });
 
   router.post('/', isLoggedIn, function (req, res, next) {
-    const { chkid, chkname, chkmember } = req.body;
+    const {
+      chkid,
+      chkname,
+      chkmember
+    } = req.body;
     console.log(chkid);
     res.redirect('/project')
   });

@@ -31,9 +31,9 @@ module.exports = (pool) => {
     console.log('Pertama > ' + sqlEdit);
 
     if (!inputPassword) {
-      sqlEdit = `UPDATE users SET firstname='${inputFirstName}', lastname='${inputLastName}', position='${inputPosition}', jobtype='${inputType}' WHERE email='${inputEmail}'`
+      sqlEdit = `UPDATE users SET firstname='${inputFirstName}', lastname='${inputLastName}', position='${inputPosition}', isfulltime='${inputType == 'Full Time' ? true : false}' WHERE email='${inputEmail}'`
     } else {
-      sqlEdit = `UPDATE users SET firstname='${inputFirstName}', lastname='${inputLastName}', position='${inputPosition}', jobtype='${inputType}', password='${inputPassword}' WHERE email='${inputEmail}'`;
+      sqlEdit = `UPDATE users SET firstname='${inputFirstName}', lastname='${inputLastName}', position='${inputPosition}', isfulltime='${inputType == 'Full Time' ? true : false}', password='${inputPassword}' WHERE email='${inputEmail}'`;
     }
 
     console.log('Kedua > ' + sqlEdit)
