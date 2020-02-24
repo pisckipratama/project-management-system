@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 
 module.exports = pool => {
+  // main page, filtering data/table, and showing data
   router.get('/', function (req, res, next) {
     let user = req.session.user;
     let sql = `SELECT users.userid, users.email, CONCAT(users.firstname,' ',users.lastname) AS name, users.position, users.isfulltime FROM users ORDER BY userid`;
@@ -19,8 +20,21 @@ module.exports = pool => {
         result
       });
     })
-
   });
+
+  // add data
+  router.get('/add', (req, res, next) => {
+    let user = req.session.user;
+    console.log(req.body)
+
+    let sql = `SELECT * FROM users`;
+    // let sql = `INSERT INTO users (email, password, firstname, lastname, position, isfulltime) VALUES ()`
+    res.render('users/add', {
+      title: "Add User",
+      url: "users",
+      user
+    })
+  })
 
   return router;
 }
