@@ -10,10 +10,18 @@ module.exports = (pool) => {
     // const id = req.params.id;
     let user = req.session.user;
     console.log(user)
-    res.render('profile/list', {
-      url: 'profile',
-      title: 'Dashboard PMS',
-      user
+    const sqlList = `SELECT * FROM users WHERE email='${user.email}'`;
+    console.log(sqlList)
+    pool.query(sqlList, (err, data) => {
+      if (err) res.status(500).json(err);
+      let result = data.rows[0]
+      console.log(result)
+      res.render('profile/list', {
+        url: 'profile',
+        title: 'Dashboard PMS',
+        user,
+        result
+      })
     })
   });
 
