@@ -62,7 +62,7 @@
           </label>
         </div>
         <div class="form-check">
-          <input class="form-check-input" type="checkbox" id="checkMember" name="chkmember" value="member">
+          <input class="form-check-input" type="checkbox" id="checkMember" name="chkmember" value="member" checked>
           <label class="form-check-label" for="checkMember">
             Member
           </label>
@@ -81,7 +81,7 @@
       <tr>
         <th scope="col">Project ID</th>
         <th scope="col">Name</th>
-        <th scope="col" hidden>Member</th>
+        <th scope="col">Member</th>
         <th scope="col">Action</th>
       </tr>
     </thead>
@@ -90,7 +90,7 @@
       <tr>
         <th scope="row"> <%= element.projectid %></th>
         <td><%= element.name %></td>
-        <td hidden> User <%= index + 1 %></td>
+        <td><%= element.members %></td>
         <td>
           <a class="btn btn-success btn-sm" href="/project/edit/<%= element.projectid %>" role="button">Edit</a>
           <a class="btn btn-danger btn-sm delete" onclick="return confirm('Are you sure you want to delete this item?');"

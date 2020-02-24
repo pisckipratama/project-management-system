@@ -17,9 +17,15 @@ module.exports = (pool) => {
     let sqlGetProjects = `SELECT * FROM projects`;
     let sqlGetUsers = `SELECT * FROM users`;
     const body = req.body;
-    console.log(body)
 
-    const { checkID, checkName, checkMember, inputID, inputName, inputMember } = req.query;
+    const {
+      checkID,
+      checkName,
+      checkMember,
+      inputID,
+      inputName,
+      inputMember
+    } = req.query;
     let content = [];
 
     if (checkID && inputID) {
@@ -32,37 +38,37 @@ module.exports = (pool) => {
       content.push = `member='${inputMember}'`;
     }
 
-    pool.query(sqlGetProjects, (err, dataProject) => {
+    pool.query(sqlGetProjects, (err, dataProjects) => {
       if (err) res.status(500).json(err)
-      console.log(dataProject.rows)
+      let dataProject = dataProjects.rows.map(item => item);
       pool.query(sqlGetUsers, (err, dataUsers) => {
         if (err) res.status(500).json(err)
-        console.log(dataUsers.rows)
+        let dataUser = dataUsers.rows.map(item => item);
         res.render('project/list', {
           title: 'Dashboard PMS',
           url: 'project',
           user: req.session.user,
           body,
-          dataUser: dataUsers.rows.map(item => item),
-          dataProject: dataProject.rows.map(item => item)
+          dataUser,
+          dataProject
         });
       })
     })
   });
 
+  // for searching data on progress
   router.post('/', isLoggedIn, function (req, res, next) {
     const {
       chkid,
       chkname,
       chkmember
     } = req.body;
-    console.log(chkid);
     res.redirect('/project')
   });
 
   // to add page
   router.get('/add', isLoggedIn, function (req, res, next) {
-    const sqlAdd1 = `SELECT * FROM users`;
+    const sqlAdd1 = `SELECT * FROM users ORDER BY userid`;
     pool.query(sqlAdd1, (err, data) => {
       if (err) res.status(500).json(err);
       let result = data.rows.map(item => item);
@@ -76,21 +82,46 @@ module.exports = (pool) => {
     })
   });
 
-  // masih progress a.k.a belum selesei
+  // to post add project
   router.post('/add', isLoggedIn, function (req, res, next) {
-    const id = req.params.id;
-    const body = req.body
-    console.log(body)
-    let sqlLoad = `SELECT * FROM users WHERE userid=${id}`;
-    pool.query(sqlLoad, (err, data) => {
-      if (err) res.status(500).json(err)
-      res.render('project/profile', {
-        title: 'Dashboard PMS',
-        result: data.rows[0],
-        user: req.session.user,
-        url: 'project',
-      });
-    })
+    const {
+      name,
+      member
+    } = req.body;
+
+
+    if (name && member) {
+      ceklist = true
+
+      const insertId = `INSERT INTO projects (name) VALUES ('${name}')`
+      pool.query(insertId, (err, dbProjects) => {
+
+        let selectidMax = `SELECT MAX (projectid) FROM projects`
+        pool.query(selectidMax, (err, dataMax) => {
+          let insertidMax = dataMax.rows[0].max
+          let insertMember = 'INSERT INTO members (userid, role, projectid) VALUES '
+          if (typeof member == 'string') {
+            insertMember += `(${member}, ${insertidMax});`
+          } else {
+            let members = member.map(item => {
+              return `(${item}, ${insertidMax})`
+            }).join(',')
+            insertMember += `${members};`
+          }
+
+          console.log(insertMember)
+          pool.query(insertMember, (err, dataSelect) => {
+
+          })
+        })
+      })
+      res.redirect('/project');
+    } else {
+      console.log("data kosong");
+      req.flash('dataNull', 'Please Select Member ')
+      res.redirect('/project/add');
+    }
+
   });
 
   // edit data landing page
