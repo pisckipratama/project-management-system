@@ -140,6 +140,27 @@
         <% }) %>
       </tbody>
     </table>
+
+    <nav aria-label="Page navigation example">
+      <ul class="pagination justify-content-center">
+        <li class="page-item <%= page <= 1 ? 'disabled' : '' %>">
+          <a class="page-link" href="?page=<%= page - 1 %>" aria-label="Previous">
+            <span aria-hidden="true">&laquo;</span>
+          </a>
+        </li>
+        <% for (let i = 1; i <= totalPage; i++) { %>
+        <li class="page-item <%= page == i ? 'active' : '' %>">
+          <a class="page-link" href="?page=<%= `${i}&${url}` %>"> <%= i %> </a>
+        </li>
+        <% } %>
+        <li class="page-item <%= page >= totalPage ? 'disabled' : '' %>">
+          <a class="page-link" href="?page=<%= page + 1 %>" aria-label="Next">
+            <span aria-hidden="true">&raquo;</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+
     <a class="btn" style="background-color: #321a75; color: #fff;" href="/users/add" role="button">Add</a>
 
   </div>

@@ -6,6 +6,8 @@ module.exports = pool => {
   router.get('/', function (req, res, next) {
     let user = req.session.user;
     let sql = `SELECT users.userid, users.email, CONCAT(users.firstname,' ',users.lastname) AS name, users.position, users.isfulltime FROM users`;
+    
+    // logic for filtering
     let result = [];
     
     const {checkID, checkName, checkEmail, checkPosition, checkTypeJob, inputId, inputName, inputEmail, inputPosition, inputTypeJob} = req.query;
@@ -45,20 +47,40 @@ module.exports = pool => {
     }
     
     sql += ' ORDER BY userid';
-    console.log(sql);
+    
+    // end logic for filtering
+
+    // start logic for pagination
+    const page = req.query.page || 1;
+    const limit = 3;
+    const offset = (page - 1) * limit;
 
     pool.query(sql, (err, data) => {
       if (err) res.status(500).json(err);
-      let result = data.rows.map(item => {
-        item.isfulltime = item.isfulltime ? 'Full Time' : 'Part Time'
-        return item
+
+      const totalPage = Math.ceil(data.rows.length / limit);
+      const url = req.url == '/' ? '/?page=1' : req.url;
+
+      sql += ` LIMIT ${limit} OFFSET ${offset}`;
+
+      // end logic for pagination
+
+      pool.query(sql, (err, data) => {
+        let result = data.rows.map(item => {
+          item.isfulltime = item.isfulltime ? 'Full Time' : 'Part Time'
+          return item
+        })
+        res.render('users/list', {
+          title: "Dashboard PMS",
+          url: 'users',
+          user,
+          result,
+          totalPage,
+          page: parseInt(page),
+          url,
+          query: req.query
+        });
       })
-      res.render('users/list', {
-        title: "Dashboard PMS",
-        url: 'users',
-        user,
-        result
-      });
     })
   });
 
