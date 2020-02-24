@@ -22,17 +22,26 @@ module.exports = pool => {
     })
   });
 
-  // add data
+  // route to add data page
   router.get('/add', (req, res, next) => {
     let user = req.session.user;
-    console.log(req.body)
-
-    let sql = `SELECT * FROM users`;
-    // let sql = `INSERT INTO users (email, password, firstname, lastname, position, isfulltime) VALUES ()`
     res.render('users/add', {
       title: "Add User",
       url: "users",
       user
+    })
+  })
+
+  // post data
+  router.post('/add', (req, res, next) => {
+    console.log(req.body);
+    const {password, firstname, lastname, email, position} = req.body;
+    const isfulltime = req.body.jobtype == 'Full Time' ? true : false;
+
+    let sql = `INSERT INTO users (email, password, firstname, lastname, position, isfulltime) VALUES ('${email}', '${password}', '${firstname}', '${lastname}', '${position}', '${isfulltime}')`;
+    pool.query(sql, (err, data) => {
+      if (err) res.status(500).json(err);
+      res.redirect('/users');
     })
   })
 
