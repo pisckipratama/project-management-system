@@ -17,8 +17,8 @@ CREATE TABLE projects(
 
 CREATE TABLE members(
   id SERIAL PRIMARY KEY,
-  role VARCHAR(20),
   userid INT,
+  role VARCHAR(20),
   projectid INT,
   FOREIGN KEY (userid) REFERENCES users(userid),
   FOREIGN KEY (projectid) REFERENCES projects(projectid)
