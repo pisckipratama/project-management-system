@@ -22,7 +22,7 @@ const pool = new Pool({
 
 // setup routes
 const indexRouter = require('./routes/index')(pool);
-const usersRouter = require('./routes/users');
+const usersRouter = require('./routes/users')(pool);
 const projectRouter = require('./routes/project')(pool);
 const profileRouter = require('./routes/profile')(pool);
 

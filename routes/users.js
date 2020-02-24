@@ -1,9 +1,15 @@
 var express = require('express');
 var router = express.Router();
 
-/* GET users listing. */
-router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
-});
+module.exports = pool => {
+  router.get('/', function (req, res, next) {
+    let user = req.session.user;
+    res.render('users/list', {
+      title: "Dashboard PMS",
+      url: 'users',
+      user
+    });
+  });
 
-module.exports = router;
+  return router;
+}
