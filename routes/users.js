@@ -63,7 +63,6 @@ module.exports = pool => {
 
   // post edit user
   router.post('/edit/:userid', (req, res, next) => {
-    console.log(req.body);
     let sql = '';
 
     const {editEmail, editFirstname, editLastname, editPassword, editPosition, editJobtype} = req.body;
@@ -76,6 +75,18 @@ module.exports = pool => {
     console.log(sql);
     pool.query(sql, (err, data) => {
       if (err) res.status(500).json(err);
+      res.redirect('/users');
+    })
+  })
+
+  router.get('/delete/:userid', (req, res, next) => {
+    const {userid} = req.params;
+    let sql = `DELETE FROM users WHERE userid=${userid}`;
+
+    console.log(sql)
+
+    pool.query(sql, (err) => {
+      if (err) res.status(500).json(err)
       res.redirect('/users');
     })
   })
