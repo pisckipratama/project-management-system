@@ -7,7 +7,7 @@
 
   <div class="container">
 
-    <form method="POST">
+    <form method="GET">
       <h3>Filters</h3>
       <div class="form-group row">
         <label for="inputId" class="col-sm-2 col-form-label">
@@ -39,10 +39,10 @@
           Position</label>
         <div class="col-sm-10">
           <select class="custom-select" name="inputPosition">
-            <option disabled selected>Choose the member</option>
-            <option value="">Quality Assurance</option>
-            <option value="">Manager</option>
-            <option value="">Software Engineer</option>
+            <option value=""></option>
+            <option value="Quality Assurance">Quality Assurance</option>
+            <option value="Manager">Manager</option>
+            <option value="Software Engineer">Software Engineer</option>
           </select>
         </div>
       </div>
@@ -54,15 +54,14 @@
           </legend>
           <div class="col-sm-10">
             <div class="form-check">
-              <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios1" name="inputTypeJob"
-                value="Full Time" checked>
+              <input class="form-check-input" type="radio" id="gridRadios1" name="inputTypeJob" value="Full Time"
+                checked>
               <label class="form-check-label" for="gridRadios1">
                 Full Time
               </label>
             </div>
             <div class="form-check">
-              <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios2" name="inputTypeJob"
-                value="Part Time">
+              <input class="form-check-input" type="radio" id="gridRadios2" name="inputTypeJob" value="Part Time">
               <label class="form-check-label" for="gridRadios2">
                 Part Time
               </label>
@@ -73,6 +72,7 @@
       <div class="form-group row">
         <div class="col-sm-10">
           <button type="submit" class="btn btn-primary" style="background-color: #321a75; color: #fff;">Search</button>
+          <a class="btn btn-success" href="/users" role="button">Show All</a>
         </div>
       </div>
     </form>
