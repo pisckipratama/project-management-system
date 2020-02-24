@@ -45,5 +45,40 @@ module.exports = pool => {
     })
   })
 
+  // get user by id for editing
+  router.get('/edit/:userid', (req, res, next) => {
+    const {userid} = req.params
+    let sql = `SELECT * FROM users WHERE userid=${userid}`;
+    pool.query(sql, (err, data) => {
+      if (err) res.status(500).json(err);
+      let result = data.rows[0];
+      console.log(result);
+      res.render('users/edit', {
+        title: "Edit User",
+        url: "users",
+        result
+      });
+    })
+  })
+
+  // post edit user
+  router.post('/edit/:userid', (req, res, next) => {
+    console.log(req.body);
+    let sql = '';
+
+    const {editEmail, editFirstname, editLastname, editPassword, editPosition, editJobtype} = req.body;
+    if (!editPassword) {
+      sql = `UPDATE users SET firstname='${editFirstname}', lastname='${editLastname}', position='${editPosition}', isfulltime=${editJobtype == 'Full Time' ? true : false} WHERE email='${editEmail}'`
+    } else {
+      sql = `UPDATE users SET firstname='${editFirstname}', lastname='${editLastname}', position='${editPosition}', isfulltime=${editJobtype == 'Full Time' ? true : false}, password='${editPassword}' WHERE email='${editEmail}'`
+    }
+
+    console.log(sql);
+    pool.query(sql, (err, data) => {
+      if (err) res.status(500).json(err);
+      res.redirect('/users');
+    })
+  })
+
   return router;
 }
