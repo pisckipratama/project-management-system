@@ -2,10 +2,18 @@
 const express = require('express');
 const router = express.Router();
 
+const isLoggedIn = (req, res, next) => {
+  if (req.session.user) {
+    next()
+  } else {
+    res.redirect('/')
+  }
+}
+
 module.exports = (pool) => {
 
   // edit profile user
-  router.get('/', function (req, res, next) {
+  router.get('/', isLoggedIn, function (req, res, next) {
     // console.log(req.headers.host)
     // const id = req.params.id;
     let user = req.session.user;
@@ -26,7 +34,7 @@ module.exports = (pool) => {
   });
 
   // to update profile user
-  router.post('/', (req, res, next) => {
+  router.post('/', isLoggedIn,  (req, res, next) => {
     const {
       inputEmail,
       inputPassword,

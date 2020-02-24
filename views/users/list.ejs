@@ -85,19 +85,19 @@
         <div class="col-sm-2">Columns</div>
         <div class="col-sm-10">
           <div class="form-check">
-            <input class="form-check-input" type="checkbox" id="checkID" name="chkid" value="id" checked>
+            <input class="form-check-input" type="checkbox" id="checkID" name="chkid" checked>
             <label class="form-check-label" for="checkID">
               ID
             </label>
           </div>
           <div class="form-check">
-            <input class="form-check-input" type="checkbox" id="checkName" name="chkname" value="name" checked>
+            <input class="form-check-input" type="checkbox" id="checkName" name="chkname" checked>
             <label class="form-check-label" for="checkName">
               Name
             </label>
           </div>
           <div class="form-check">
-            <input class="form-check-input" type="checkbox" id="checkMember" name="chkmember" value="member" checked>
+            <input class="form-check-input" type="checkbox" id="checkMember" name="chkmember" checked>
             <label class="form-check-label" for="checkMember">
               Position
             </label>
@@ -150,7 +150,7 @@
         </li>
         <% for (let i = 1; i <= totalPage; i++) { %>
         <li class="page-item <%= page == i ? 'active' : '' %>">
-          <a class="page-link" href="?page=<%= `${i}&${url}` %>"> <%= i %> </a>
+          <a class="page-link" href="?page=<%= `${i}&${link}` %>"> <%= i %> </a>
         </li>
         <% } %>
         <li class="page-item <%= page >= totalPage ? 'disabled' : '' %>">

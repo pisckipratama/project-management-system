@@ -54,6 +54,28 @@ module.exports = (pool) => {
         });
       })
     })
+
+    // --> dari kang moohat
+    // const {checkID, checkName, checkMember, inputID, inputName, inputMember} = req.query;
+    // const url = (req.url == '/') ? '/?page=1' : req.url;
+    // const page = req.query.page || 1;
+    // const limit = 3;
+    // const offset = (page - 1) * limit;
+    // let params = [];
+
+    // if (checkID && inputID) {
+    //   params.push(`projects.projectid=${inputID}`)
+    // }
+
+    // if (checkName && inputName) {
+    //   params.push(`project.name='${inputName}'`)
+    // }
+
+    // if (checkMember && inputMember) {
+    //   params.push(`members.userid=${inputMember}`)
+    // }
+
+    // let sql = `SELECT COUNT(id)`
   });
 
   // for searching data on progress
@@ -84,15 +106,9 @@ module.exports = (pool) => {
 
   // to post add project
   router.post('/add', isLoggedIn, function (req, res, next) {
-    const {
-      name,
-      member
-    } = req.body;
-
+    const { name, member } = req.body;
 
     if (name && member) {
-      ceklist = true
-
       const insertId = `INSERT INTO projects (name) VALUES ('${name}')`
       pool.query(insertId, (err, dbProjects) => {
 
@@ -115,10 +131,11 @@ module.exports = (pool) => {
           })
         })
       })
+
       res.redirect('/project');
+
     } else {
       console.log("data kosong");
-      req.flash('dataNull', 'Please Select Member ')
       res.redirect('/project/add');
     }
 

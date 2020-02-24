@@ -1,9 +1,17 @@
 var express = require('express');
 var router = express.Router();
 
+const isLoggedIn = (req, res, next) => {
+  if (req.session.user) {
+    next()
+  } else {
+    res.redirect('/')
+  }
+}
+
 module.exports = pool => {
   // main page, filtering data/table, and showing data
-  router.get('/', function (req, res, next) {
+  router.get('/', isLoggedIn, function (req, res, next) {
     let user = req.session.user;
     let sql = `SELECT users.userid, users.email, CONCAT(users.firstname,' ',users.lastname) AS name, users.position, users.isfulltime FROM users`;
     
@@ -59,7 +67,7 @@ module.exports = pool => {
       if (err) res.status(500).json(err);
 
       const totalPage = Math.ceil(data.rows.length / limit);
-      const url = req.url == '/' ? '/?page=1' : req.url;
+      const link = req.url == '/' ? '/?page=1' : req.url;
 
       sql += ` LIMIT ${limit} OFFSET ${offset}`;
 
@@ -77,7 +85,7 @@ module.exports = pool => {
           result,
           totalPage,
           page: parseInt(page),
-          url,
+          link,
           query: req.query
         });
       })
@@ -85,7 +93,7 @@ module.exports = pool => {
   });
 
   // route to add data page
-  router.get('/add', (req, res, next) => {
+  router.get('/add', isLoggedIn, (req, res, next) => {
     let user = req.session.user;
     res.render('users/add', {
       title: "Add User",
@@ -95,7 +103,8 @@ module.exports = pool => {
   })
 
   // post data
-  router.post('/add', (req, res, next) => {
+  router.post('/add', isLoggedIn, (req, res, next) => {
+    const user = req.session.user
     const {password, firstname, lastname, email, position} = req.body;
     const isfulltime = req.body.jobtype == 'Full Time' ? true : false;
 
@@ -107,7 +116,8 @@ module.exports = pool => {
   })
 
   // get user by id for editing
-  router.get('/edit/:userid', (req, res, next) => {
+  router.get('/edit/:userid', isLoggedIn, (req, res, next) => {
+    const user = req.session.user;
     const {userid} = req.params
     let sql = `SELECT * FROM users WHERE userid=${userid}`;
     pool.query(sql, (err, data) => {
@@ -116,13 +126,14 @@ module.exports = pool => {
       res.render('users/edit', {
         title: "Edit User",
         url: "users",
-        result
+        result,
+        user
       });
     })
   })
 
   // post edit user
-  router.post('/edit/:userid', (req, res, next) => {
+  router.post('/edit/:userid', isLoggedIn, (req, res, next) => {
     let sql = '';
 
     const {editEmail, editFirstname, editLastname, editPassword, editPosition, editJobtype} = req.body;
@@ -138,13 +149,14 @@ module.exports = pool => {
     })
   })
 
-  router.get('/delete/:userid', (req, res, next) => {
+  router.get('/delete/:userid', isLoggedIn, (req, res, next) => {
+    const user = req.session.user
     const {userid} = req.params;
     let sql = `DELETE FROM users WHERE userid=${userid}`;
 
     pool.query(sql, (err) => {
       if (err) res.status(500).json(err)
-      res.redirect('/users');
+      res.redirect('/users', { user });
     })
   })
 
