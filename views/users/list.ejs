@@ -131,7 +131,7 @@
           <td><%= element.position %></td>
           <td><%= element.isfulltime %></td>
           <td>
-            <a class="btn btn-success btn-sm" href="/project/edit/<%= element.userid %>" role="button">Edit</a>
+            <a class="btn btn-success btn-sm" href="/users/edit/<%= element.userid %>" role="button">Edit</a>
             <a class="btn btn-danger btn-sm delete"
               onclick="return confirm('Are you sure you want to delete this item?');"
               href="/project/delete/<%= element.userid %>">Delete</a>
@@ -140,7 +140,7 @@
         <% }) %>
       </tbody>
     </table>
-    <a class="btn" style="background-color: #321a75; color: #fff;" href="/project/add" role="button">Add</a>
+    <a class="btn" style="background-color: #321a75; color: #fff;" href="/users/add" role="button">Add</a>
 
   </div>
 </div>
