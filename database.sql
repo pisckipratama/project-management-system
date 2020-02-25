@@ -59,3 +59,32 @@ CREATE TABLE activity(
   description TEXT,
   author VARCHAR(50)
 )
+SELECT DISTINCT projects.projectid, projects.name FROM projects
+LEFT JOIN members ON projects.projectid = members.projectid;
+
+SELECT DISTINCT projects.projectid FROM projects
+LEFT JOIN members ON projects.projectid = members.projectid;
+
+SELECT projects.projectid, projects.name, CONCAT (users.firstname,' ',users.lastname) AS fullname FROM projects
+LEFT JOIN members ON projects.projectid = members.projectid
+LEFT JOIN users ON users.userid = members.userid
+WHERE projects.projectid IN (SELECT DISTINCT projects.projectid FROM projects LEFT JOIN members ON projects.projectid = members.projectid)
+
+SELECT COUNT(id) as total FROM (SELECT DISTINCT projects.projectid AS id FROM projects LEFT JOIN members ON projects.projectid = members.projectid) AS projectmember;
+
+SELECT DISTINCT projects.projectid AS id
+FROM projects 
+LEFT JOIN members ON projects.projectid = members.projectid
+
+SELECT DISTINCT projects.projectid, projects.name
+FROM projects LEFT JOIN members ON projects.projectid = members.projectid
+
+SELECT projects.projectid, users.userid, CONCAT (users.firstname,' ',users.lastname) AS fullname
+FROM projects LEFT JOIN members ON projects.projectid = members.projectid 
+LEFT JOIN users ON users.userid = members.userid
+WHERE projects.projectid IN (SELECT DISTINCT projects.projectid
+FROM projects LEFT JOIN members ON projects.projectid = members.projectid ORDER BY projects.projectid);
+
+SELECT DISTINCT projects.projectid, projects.name
+FROM projects LEFT JOIN members ON projects.projectid = members.projectid
+ORDERBY projects.projectid LIMIT 3 OFFSET 0
