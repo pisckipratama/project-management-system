@@ -87,4 +87,4 @@ FROM projects LEFT JOIN members ON projects.projectid = members.projectid ORDER 
 
 SELECT DISTINCT projects.projectid, projects.name
 FROM projects LEFT JOIN members ON projects.projectid = members.projectid
-ORDERBY projects.projectid LIMIT 3 OFFSET 0
+ORDER BY projects.projectid;
