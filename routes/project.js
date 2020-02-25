@@ -77,6 +77,7 @@ module.exports = (pool) => {
 
           let sqlUser = `SELECT * FROM users`;
           pool.query(sqlUser, (err, data) => {
+            if (err) res.status(500).json(err)
             res.render('project/list', {
               title: 'Dashboard PMS',
               url: 'project',
