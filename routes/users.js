@@ -135,12 +135,13 @@ module.exports = pool => {
   // post edit user
   router.post('/edit/:userid', isLoggedIn, (req, res, next) => {
     let sql = '';
+    const { userid } = req.params;
 
     const {editEmail, editFirstname, editLastname, editPassword, editPosition, editJobtype} = req.body;
     if (!editPassword) {
-      sql = `UPDATE users SET firstname='${editFirstname}', lastname='${editLastname}', position='${editPosition}', isfulltime=${editJobtype == 'Full Time' ? true : false} WHERE email='${editEmail}'`
+      sql = `UPDATE users SET email='${editEmail}', firstname='${editFirstname}', lastname='${editLastname}', position='${editPosition}', isfulltime=${editJobtype == 'Full Time' ? true : false} WHERE userid='${userid}'`
     } else {
-      sql = `UPDATE users SET firstname='${editFirstname}', lastname='${editLastname}', position='${editPosition}', isfulltime=${editJobtype == 'Full Time' ? true : false}, password='${editPassword}' WHERE email='${editEmail}'`
+      sql = `UPDATE users SET email='${editEmail}', firstname='${editFirstname}', lastname='${editLastname}', position='${editPosition}', isfulltime=${editJobtype == 'Full Time' ? true : false}, password='${editPassword}' WHERE userid=${userid}`
     }
 
     pool.query(sql, (err, data) => {
