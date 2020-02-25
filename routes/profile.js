@@ -26,7 +26,7 @@ module.exports = (pool) => {
       console.log(result)
       res.render('profile/list', {
         url: 'profile',
-        title: 'Dashboard PMS',
+        title: 'PMS Dashboard',
         user,
         result
       })

@@ -10,7 +10,7 @@ router.use(bodyParser.json())
 module.exports = pool => {
   router.get('/', (req, res, next) => {
     res.render('login', {
-      title: 'Project Management System',
+      title: 'PMS Dashboard',
       loginMessage: req.flash('loginMessage')
     });
   });

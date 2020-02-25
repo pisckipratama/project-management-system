@@ -79,7 +79,7 @@ module.exports = (pool) => {
           pool.query(sqlUser, (err, data) => {
             if (err) res.status(500).json(err)
             res.render('project/list', {
-              title: 'Dashboard PMS',
+              title: 'PMS Dashboard',
               url: 'project',
               user: req.session.user,
               query: req.query,
@@ -114,7 +114,7 @@ module.exports = (pool) => {
       let result = data.rows.map(item => item);
 
       res.render('project/add', {
-        title: 'Dashboard PMS',
+        title: 'PMS Dashboard',
         user: req.session.user,
         url: 'project',
         result
@@ -173,7 +173,7 @@ module.exports = (pool) => {
         res.render('project/edit', {
           user: req.session.user,
           url: 'project',
-          title: 'Dashboard PMS',
+          title: 'PMS Dashboard',
           result: result[0],
           dataUser: dataUser.rows.map(item => item)
         });

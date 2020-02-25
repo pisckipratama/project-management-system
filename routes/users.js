@@ -79,7 +79,7 @@ module.exports = pool => {
           return item
         })
         res.render('users/list', {
-          title: "Dashboard PMS",
+          title: "PMS Dashboard",
           url: 'users',
           user,
           result,
@@ -96,7 +96,7 @@ module.exports = pool => {
   router.get('/add', isLoggedIn, (req, res, next) => {
     let user = req.session.user;
     res.render('users/add', {
-      title: "Add User",
+      title: "PMS Dashboard",
       url: "users",
       user
     })
@@ -124,7 +124,7 @@ module.exports = pool => {
       if (err) res.status(500).json(err);
       let result = data.rows[0];
       res.render('users/edit', {
-        title: "Edit User",
+        title: "PMS Dashboard",
         url: "users",
         result,
         user
