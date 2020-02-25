@@ -26,7 +26,7 @@
           Member</label>
         <div class="col-sm-10">
           <select class="custom-select" name="inputMember">
-            <option disabled selected>Choose the member</option>
+            <option value="">Choose Member</option>
             <% dataUser.forEach((element, index) => { %>
             <option value="<%= element.email %>"><%= element.firstname %> <%= element.lastname %></option>
             <% }) %>
@@ -79,7 +79,7 @@
     <table class="table table-striped">
       <thead>
         <tr>
-          <th scope="col">Project ID</th>
+          <th scope="col">ID</th>
           <th scope="col">Name</th>
           <th scope="col">Member</th>
           <th scope="col">Action</th>
@@ -88,7 +88,10 @@
       <tbody>
         <% dataProject.forEach((element, index) => { %>
         <tr>
-          <th scope="row"> <%= element.projectid %></th>
+          <th scope="row"> 
+            <!-- <a href=""></a>  -->
+            <a class="btn btn-outline-secondary" href="/project" role="button"> <%= element.projectid %> </a>
+          </th>
           <td><%= element.name %></td>
           <td><%= element.members %></td>
           <td>
