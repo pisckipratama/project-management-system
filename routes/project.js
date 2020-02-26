@@ -21,9 +21,6 @@ module.exports = (pool) => {
     const limit = 3;
     const offset = (page - 1) * limit;
     let params = [];
-    console.log(link);
-
-    console.log(req.query);
 
     if (checkID && inputID) {
       params.push(`projects.projectid='${inputID}'`)
@@ -44,8 +41,6 @@ module.exports = (pool) => {
     }
     sql += `) AS projectmember`;
 
-    console.log(params)
-    console.log(sql);
     pool.query(sql, (err, count) => {
       if (err) res.status(500).json(err);
 
@@ -57,14 +52,14 @@ module.exports = (pool) => {
       if (params.length > 0) {
         sql += ` WHERE ${params.join(" AND ")}`;
       } 
-      sql += ` ORDER BY projects.projectid LIMIT ${limit} OFFSET ${offset}`;
+      sql += ` ORDER BY projects.projectid DESC LIMIT ${limit} OFFSET ${offset}`;
       
       let subquery = `SELECT DISTINCT projects.projectid FROM projects LEFT JOIN members ON projects.projectid = members.projectid`;
 
       if (params.length > 0) {
         subquery += ` WHERE ${params.join(" AND ")}`
       }
-      subquery += ` ORDER BY projects.projectid LIMIT ${limit} OFFSET ${offset}`;
+      subquery += ` ORDER BY projects.projectid DESC LIMIT ${limit} OFFSET ${offset}`;
 
       let sqlMember = `SELECT projects.projectid, users.userid, CONCAT (users.firstname,' ',users.lastname) AS fullname FROM projects LEFT JOIN members ON projects.projectid = members.projectid LEFT JOIN users ON users.userid = members.userid WHERE projects.projectid IN (${subquery})`;
 
@@ -75,13 +70,12 @@ module.exports = (pool) => {
           if (err) res.status(500).json(err);
           
           projectData.rows.map(project => {
-            project.member = memberData.rows.filter(member => member.projectid == project.projectid).map(data => data.fullname).join(', ').trim()
+            project.member = memberData.rows.filter(member => member.projectid == project.projectid).map(data => data.fullname).sort().join(', ').trim()
           })
 
           let sqlUser = `SELECT * FROM users`;
           pool.query(sqlUser, (err, data) => {
             if (err) res.status(500).json(err)
-            console.log(projectData.rows.map(item => item))
             res.render('project/list', {
               title: 'PMS Dashboard',
               url: 'project',
@@ -91,7 +85,8 @@ module.exports = (pool) => {
               pages,
               link,
               dataUser: data.rows.map(item => item),
-              dataProject: projectData.rows.map(item => item)
+              dataProject: projectData.rows.map(item => item),
+              projectMessage: req.flash('projectMessage')
             })
           })
         })
@@ -110,7 +105,7 @@ module.exports = (pool) => {
     res.redirect('/project')
   });
 
-  // to add page
+  // to add project page
   router.get('/add', isLoggedIn, function (req, res, next) {
     const sqlAdd1 = `SELECT * FROM users ORDER BY userid`;
     pool.query(sqlAdd1, (err, data) => {
@@ -121,7 +116,8 @@ module.exports = (pool) => {
         title: 'PMS Dashboard',
         user: req.session.user,
         url: 'project',
-        result
+        result, 
+        projectMessage: req.flash('projectMessage')
       });
     })
   });
@@ -130,6 +126,7 @@ module.exports = (pool) => {
   router.post('/add', isLoggedIn, function (req, res, next) {
     const { name, member } = req.body;
 
+    console.log(req.body)
     if (name && member) {
       const insertId = `INSERT INTO projects (name) VALUES ('${name}')`
       pool.query(insertId, (err, dbProjects) => {
@@ -146,18 +143,13 @@ module.exports = (pool) => {
             }).join(',')
             insertMember += `${members};`
           }
-
-          console.log(insertMember)
-          pool.query(insertMember, (err, dataSelect) => {
-
+          pool.query(insertMember, (err, dataSelect) => {            
+            res.redirect('/project');
           })
         })
       })
-
-      res.redirect('/project');
-
     } else {
-      console.log("data kosong");
+      req.flash('projectMessage', 'Please add members')
       res.redirect('/project/add');
     }
 
