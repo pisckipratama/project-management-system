@@ -30,7 +30,7 @@ module.exports = (pool) => {
     }
 
     if (checkName && inputName) {
-      params.push(`projects.name='${inputName}'`)
+      params.push(`projects.name LIKE '%${inputName}%'`)
     }
 
     if (checkMember && inputMember) {
