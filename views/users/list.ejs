@@ -10,6 +10,7 @@
     <form method="GET">
       <h3>Filters</h3>
       <div class="form-group row">
+        <input type="hidden" name="page" value="1">
         <label for="inputId" class="col-sm-2 col-form-label">
           <input type="checkbox" name="checkID"> ID
         </label>
@@ -39,10 +40,10 @@
           Position</label>
         <div class="col-sm-10">
           <select class="custom-select" name="inputPosition">
-            <option value=""></option>
+            <option value="">Choose Position</option>
             <option value="Quality Assurance">Quality Assurance</option>
             <option value="Manager">Manager</option>
-            <option value="Software Engineer">Software Engineer</option>
+            <option value="Software Developer">Software Developer</option>
           </select>
         </div>
       </div>
@@ -144,17 +145,17 @@
     <nav aria-label="Page navigation example">
       <ul class="pagination justify-content-center">
         <li class="page-item <%= page <= 1 ? 'disabled' : '' %>">
-          <a class="page-link" href="?page=<%= page - 1 %>" aria-label="Previous">
+          <a class="page-link" href="/users<%= link.replace(`page=${parseInt(page)}`, `page=${(parseInt(page) - 1)}`) %>" aria-label="Previous">
             <span aria-hidden="true">&laquo;</span>
           </a>
         </li>
         <% for (let i = 1; i <= totalPage; i++) { %>
         <li class="page-item <%= page == i ? 'active' : '' %>">
-          <a class="page-link" href="?page=<%= `${i}&${link}` %>"> <%= i %> </a>
+          <a class="page-link" href="/users<%= link.replace(`page=${parseInt(page)}`, `page=${i}`) %>"> <%= i %> </a>
         </li>
         <% } %>
         <li class="page-item <%= page >= totalPage ? 'disabled' : '' %>">
-          <a class="page-link" href="?page=<%= page + 1 %>" aria-label="Next">
+          <a class="page-link" href="/users<%= link.replace(`page=${parseInt(page)}`, `page=${(parseInt(page) + 1)}`) %>" aria-label="Next">
             <span aria-hidden="true">&raquo;</span>
           </a>
         </li>
