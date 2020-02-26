@@ -8,6 +8,7 @@
   <div class="container">
     <h3>Filters</h3>
     <form id="form-filter" method="GET">
+      <input type="hidden" name="page" value="1">
       <div class="form-group row">
         <label for="inputID" class="col-sm-2 col-form-label"> <input type="checkbox" name="checkID"> ID</label>
         <div class="col-sm-10">
@@ -28,7 +29,7 @@
           <select class="custom-select" name="inputMember">
             <option value="">Choose Member</option>
             <% dataUser.forEach((element, index) => { %>
-            <option value="<%= element.email %>"><%= element.firstname %> <%= element.lastname %></option>
+            <option value="<%= element.userid %>"><%= element.firstname %> <%= element.lastname %></option>
             <% }) %>
           </select>
         </div>
@@ -37,6 +38,7 @@
       <div class="form-group row">
         <div class="col-sm-10">
           <button type="submit" class="btn btn" style="background-color: #321a75; color: #fff;">Search</button>
+          <a class="btn" style="background-color: maroon; color: #fff;" href="/project" role="button">Show All</a>
         </div>
       </div>
     </form>
