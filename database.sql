@@ -29,6 +29,7 @@ CREATE TABLE members(
 CREATE TABLE issues(
   issueid SERIAL PRIMARY KEY,
   projectid INT,
+  userid INT,
   tracker VARCHAR(10),
   subject VARCHAR(30),
   description TEXT,
@@ -88,3 +89,7 @@ FROM projects LEFT JOIN members ON projects.projectid = members.projectid ORDER 
 SELECT DISTINCT projects.projectid, projects.name
 FROM projects LEFT JOIN members ON projects.projectid = members.projectid
 ORDER BY projects.projectid;
+
+SELECT members.userid, projects.name, projects.projectid
+FROM members LEFT JOIN projects ON projects.projectid = members.projectid
+WHERE projects.projectid = 21
