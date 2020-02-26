@@ -21,17 +21,20 @@ module.exports = (pool) => {
     const limit = 3;
     const offset = (page - 1) * limit;
     let params = [];
+    console.log(link);
+
+    console.log(req.query);
 
     if (checkID && inputID) {
-      params.push(`projects.projectid=${inputID}`)
+      params.push(`projects.projectid='${inputID}'`)
     }
 
     if (checkName && inputName) {
-      params.push(`project.name='${inputName}'`)
+      params.push(`projects.name='${inputName}'`)
     }
 
     if (checkMember && inputMember) {
-      params.push(`members.userid=${inputMember}`)
+      params.push(`members.userid='${inputMember}'`)
     }
 
     let sql = `SELECT COUNT(id) as total FROM (SELECT DISTINCT projects.projectid AS id FROM projects LEFT JOIN members ON projects.projectid = members.projectid`;
@@ -41,10 +44,12 @@ module.exports = (pool) => {
     }
     sql += `) AS projectmember`;
 
+    console.log(params)
+    console.log(sql);
     pool.query(sql, (err, count) => {
       if (err) res.status(500).json(err);
 
-      const total = count.rows[0].total;
+      const total = count.hasOwnProperty('rows') ? count.rows[0].total : 0;
       const pages = Math.ceil(total / limit);
 
       sql = `SELECT DISTINCT projects.projectid, projects.name FROM projects LEFT JOIN members ON projects.projectid = members.projectid`
@@ -63,8 +68,6 @@ module.exports = (pool) => {
 
       let sqlMember = `SELECT projects.projectid, users.userid, CONCAT (users.firstname,' ',users.lastname) AS fullname FROM projects LEFT JOIN members ON projects.projectid = members.projectid LEFT JOIN users ON users.userid = members.userid WHERE projects.projectid IN (${subquery})`;
 
-      console.log(sql);
-      console.log(sqlMember)
       pool.query(sql, (err, projectData) => {
         if (err) res.status(500).json(err);
 
@@ -78,6 +81,7 @@ module.exports = (pool) => {
           let sqlUser = `SELECT * FROM users`;
           pool.query(sqlUser, (err, data) => {
             if (err) res.status(500).json(err)
+            console.log(projectData.rows.map(item => item))
             res.render('project/list', {
               title: 'PMS Dashboard',
               url: 'project',
