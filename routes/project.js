@@ -96,7 +96,11 @@ module.exports = (pool) => {
   
   // for option table
   router.post("/option", isLoggedIn, (req, res, next) => {
-    console.log(req.body);
+    let option = [];
+    option.push(req.body)
+
+    console.log(option)
+    
     res.redirect('/project');
   })
 
