@@ -46,25 +46,25 @@
   <hr>
 
   <div class="container">
-    <form method="POST" action="/project">
+    <form method="POST" action="/project/option">
       <h3>Option</h3>
       <div class="form-group row">
         <div class="col-sm-2">Columns</div>
         <div class="col-sm-10">
           <div class="form-check">
-            <input class="form-check-input" type="checkbox" id="checkID" name="chkid" value="id" checked>
+            <input class="form-check-input" type="checkbox" id="checkID" name="chkid" value="true" checked>
             <label class="form-check-label" for="checkID">
               ID
             </label>
           </div>
           <div class="form-check">
-            <input class="form-check-input" type="checkbox" id="checkName" name="chkname" value="name" checked>
+            <input class="form-check-input" type="checkbox" id="checkName" name="chkname" value="true" checked>
             <label class="form-check-label" for="checkName">
               Name
             </label>
           </div>
           <div class="form-check">
-            <input class="form-check-input" type="checkbox" id="checkMember" name="chkmember" value="member" checked>
+            <input class="form-check-input" type="checkbox" id="checkMember" name="chkmember" value="true" checked>
             <label class="form-check-label" for="checkMember">
               Member
             </label>
@@ -92,7 +92,8 @@
         <tr>
           <th scope="row"> 
             <!-- <a href=""></a>  -->
-            <a class="btn btn-outline-secondary" href="/project" role="button"> <%= element.projectid %> </a>
+            <a class="btn btn-outline-secondary" href="/project/overview/<%= element.projectid %>" role="button">
+              <%= element.projectid %> </a>
           </th>
           <td><%= element.name %></td>
           <td><%= element.member %></td>

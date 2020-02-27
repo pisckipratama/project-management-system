@@ -3,9 +3,17 @@
 }
 
 body {
-  font-family: 'Livvic', sans-serif;
+  font-family: 'Poppins', sans-serif;
 }
 
 nav {
   font-family: 'Dosis';
+}
+
+.footer {
+  background: #f2f2f2;
+  height: 50px;
+  margin-top: 50px;
+  color: #000;
+  padding-top: 10px;
 }

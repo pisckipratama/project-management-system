@@ -94,6 +94,12 @@ module.exports = (pool) => {
     })
   });
   
+  // for option table
+  router.post("/option", isLoggedIn, (req, res, next) => {
+    console.log(req.body);
+    res.redirect('/project');
+  })
+
   // to add project page
   router.get('/add', isLoggedIn, function (req, res, next) {
     const sqlAdd1 = `SELECT * FROM users ORDER BY userid`;
@@ -211,5 +217,26 @@ module.exports = (pool) => {
     })
   })
   
+  // to landing overview page
+  router.get('/overview/:projectid', isLoggedIn, (req, res, next) => {
+    const {projectid} = req.params;
+    const user = req.session.user;
+    
+    let sqlShow = `SELECT * FROM projects WHERE projectid=${projectid}`;
+
+      pool.query(sqlShow, (err, data) => {
+        if (err) res.status(500).json(err);
+
+        res.render('project/overview/list', {
+          title: 'PMS Dashboard',
+          user,
+          url: 'project',
+          url2: 'overview',
+          result: data.rows[0]
+        });
+      })
+    })
+
+
   return router
 };

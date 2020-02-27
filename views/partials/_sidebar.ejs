@@ -1,0 +1,13 @@
+<%- include("_navbar") %>
+<div class="row">
+
+  <div class="col-2" style="background-color: #f1f1f1;">
+    <br>
+    <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+      <a class="nav-link <%= url2 == 'overview' ? 'active' : '' %>" href="/project/overview/<%= result.projectid %>">Overview</a>
+      <a class="nav-link <%= url2 == 'activity' ? 'active' : '' %>" href="/project/overview/<%= result.projectid %>">Activity</a>
+      <br>
+      <a class="nav-link <%= url2 == 'members' ? 'active' : '' %>" href="/project/overview/<%= result.projectid %>">Members</a>
+      <a class="nav-link <%= url2 == 'issues' ? 'active' : '' %>" href="/project/overview/<%= result.projectid %>">Issues</a>
+    </div>
+  </div>
