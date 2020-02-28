@@ -74,6 +74,7 @@ module.exports = pool => {
       // end logic for pagination
 
       pool.query(sql, (err, data) => {
+        if (err) res.status(500).json(err);
         let result = data.rows.map(item => {
           item.isfulltime = item.isfulltime ? 'Full Time' : 'Part Time'
           return item
