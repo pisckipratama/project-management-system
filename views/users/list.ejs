@@ -86,20 +86,20 @@
         <div class="col-sm-2">Columns</div>
         <div class="col-sm-10">
           <div class="form-check">
-            <input class="form-check-input" type="checkbox" id="checkID" name="chkid" checked>
+            <input class="form-check-input" type="checkbox" id="checkID" name="chkid" value="true" <%= option.chkid ? `checked` : `` %> >
             <label class="form-check-label" for="checkID">
               ID
             </label>
           </div>
           <div class="form-check">
-            <input class="form-check-input" type="checkbox" id="checkName" name="chkname" checked>
+            <input class="form-check-input" type="checkbox" id="checkName" name="chkname" value="true" <%= option.chkname ? `checked` : `` %> >
             <label class="form-check-label" for="checkName">
               Name
             </label>
           </div>
           <div class="form-check">
-            <input class="form-check-input" type="checkbox" id="checkMember" name="chkmember" checked>
-            <label class="form-check-label" for="checkMember">
+            <input class="form-check-input" type="checkbox" id="checkPosition" name="chkposition" value="true" <%= option.chkposition ? `checked` : `` %> >
+            <label class="form-check-label" for="checkPosition">
               Position
             </label>
           </div>
@@ -115,10 +115,10 @@
     <table class="table table-striped">
       <thead>
         <tr>
-          <th scope="col">User ID</th>
+          <%- option.chkid ? `<th scope="col">User ID</th>` : '' %>
           <th scope="col">Email</th>
-          <th scope="col">Name</th>
-          <th scope="col">Position</th>
+          <%- option.chkname ? '<th scope="col">Name</th>' : '' %>
+          <%- option.chkposition ? `<th scope="col">Position</th>` : '' %>
           <th scope="col">Type Job</th>
           <th scope="col">Action</th>
         </tr>
@@ -126,10 +126,10 @@
       <tbody>
         <% result.forEach((element, index) => { %>
         <tr>
-          <th scope="row"> <%= element.userid %></th>
+          <th scope="row" <%= option.chkid ? '' : 'hidden' %> > <%= element.userid %></th>
           <td><%= element.email %></td>
-          <td><%= element.name %></td>
-          <td><%= element.position %></td>
+          <td <%= option.chkname ? '' : 'hidden' %> ><%= element.name %></td>
+          <td <%= option.chkposition ? '' : 'hidden' %> ><%= element.position %></td>
           <td><%= element.isfulltime %></td>
           <td>
             <a class="btn btn-success btn-sm" href="/users/edit/<%= element.userid %>" role="button">Edit</a>

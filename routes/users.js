@@ -98,6 +98,16 @@ module.exports = pool => {
     })
   });
 
+  router.post('/', isLoggedIn, (req, res, next) => {
+    let user = req.session.user;
+    let sqlEditOption = `UPDATE users SET option='${JSON.stringify(req.body)}' WHERE userid=${user.userid}`;
+    
+    pool.query(sqlEditOption, err => {
+      if (err) res.status(500).json(err);
+      res.redirect('/users');
+    })
+  })
+
   // route to add data page
   router.get('/add', isLoggedIn, (req, res, next) => {
     let user = req.session.user;
