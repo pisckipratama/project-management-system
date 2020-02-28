@@ -231,7 +231,7 @@ module.exports = (pool) => {
       pool.query(sqlShow, (err, data) => {
         if (err) res.status(500).json(err);
 
-        res.render('project/overview/list', {
+        res.render('overview/list', {
           title: 'PMS Dashboard',
           user,
           url: 'project',
@@ -239,6 +239,24 @@ module.exports = (pool) => {
           result: data.rows[0]
         });
       })
+    })
+
+  // to landing member page
+  router.get('/:projectid/overview/member', isLoggedIn, (req, res, next) => {
+    const {projectid} = req.params;
+    const user = req.session.user;
+
+    let sqlShow = `SELECT * FROM projects WHERE projectid=${projectid}`;
+    
+    pool.query(sqlShow, (err, data) => {
+      res.render('project/overview/member/list', {
+        title: 'PMS Dashboard',
+        user,
+        url: 'project',
+        url2: 'member',
+        result: data.rows.map(item => item)
+      })
+    })
     })
 
 
