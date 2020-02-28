@@ -79,16 +79,21 @@ module.exports = pool => {
           item.isfulltime = item.isfulltime ? 'Full Time' : 'Part Time'
           return item
         })
-        res.render('users/list', {
-          title: "PMS Dashboard",
-          url: 'users',
-          user,
-          result,
-          totalPage,
-          page: parseInt(page),
-          link,
-          query: req.query
-        });
+
+        let sqlOption = `SELECT option FROM users WHERE userid = ${user.userid}`;
+        pool.query(sqlOption, (err, dataOption) => {
+          res.render('users/list', {
+            title: "PMS Dashboard",
+            url: 'users',
+            user,
+            result,
+            totalPage,
+            page: parseInt(page),
+            link,
+            query: req.query,
+            option: dataOption.rows[0].option
+          });
+        })
       })
     })
   });
