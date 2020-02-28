@@ -52,19 +52,19 @@
         <div class="col-sm-2">Columns</div>
         <div class="col-sm-10">
           <div class="form-check">
-            <input class="form-check-input" type="checkbox" id="checkID" name="chkid" value="true" checked>
+            <input class="form-check-input" type="checkbox" id="checkID" name="chkid" value="true" <%= option.chkid ? 'checked' : '' %> >
             <label class="form-check-label" for="checkID">
               ID
             </label>
           </div>
           <div class="form-check">
-            <input class="form-check-input" type="checkbox" id="checkName" name="chkname" value="true" checked>
+            <input class="form-check-input" type="checkbox" id="checkName" name="chkname" value="true" <%= option.chkname ? 'checked' : '' %> >
             <label class="form-check-label" for="checkName">
               Name
             </label>
           </div>
           <div class="form-check">
-            <input class="form-check-input" type="checkbox" id="checkMember" name="chkmember" value="true" checked>
+            <input class="form-check-input" type="checkbox" id="checkMember" name="chkmember" value="true" <%= option.chkmember ? 'checked' : '' %> >
             <label class="form-check-label" for="checkMember">
               Member
             </label>
@@ -81,22 +81,22 @@
     <table class="table table-striped">
       <thead>
         <tr>
-          <th scope="col">ID</th>
-          <th scope="col">Name</th>
-          <th scope="col">Member</th>
+          <th scope="col" <%= option.chkid ? '' : 'hidden' %> >ID</th>
+          <th scope="col" <%= option.chkname ? '' : 'hidden' %> >Name</th>
+          <th scope="col" <%= option.chkmember ? '' : 'hidden' %> >Member</th>
           <th scope="col">Action</th>
         </tr>
       </thead>
       <tbody>
         <% dataProject.forEach((element, index) => { %>
         <tr>
-          <th scope="row"> 
+          <th scope="row" <%= option.chkid ? '' : 'hidden' %> >
             <!-- <a href=""></a>  -->
             <a class="btn btn-outline-secondary" href="/project/overview/<%= element.projectid %>" role="button">
               <%= element.projectid %> </a>
           </th>
-          <td><%= element.name %></td>
-          <td><%= element.member %></td>
+          <td <%= option.chkname ? '' : 'hidden' %> ><%= element.name %></td>
+          <td <%= option.chkmember ? '' : 'hidden' %> ><%= element.member %></td>
           <td>
             <a class="btn btn-success btn-sm" href="/project/edit/<%= element.projectid %>" role="button">Edit</a>
             <a class="btn btn-danger btn-sm delete"

@@ -76,17 +76,23 @@ module.exports = (pool) => {
           let sqlUser = `SELECT * FROM users`;
           pool.query(sqlUser, (err, data) => {
             if (err) res.status(500).json(err)
-            res.render('project/list', {
-              title: 'PMS Dashboard',
-              url: 'project',
-              user: req.session.user,
-              query: req.query,
-              page,
-              pages,
-              link,
-              dataUser: data.rows.map(item => item),
-              dataProject: projectData.rows.map(item => item),
-              projectMessage: req.flash('projectMessage')
+
+            let sqlGetOption = `SELECT optionproject FROM users WHERE userid=${req.session.user.userid}`;
+            pool.query(sqlGetOption, (err, dataOption) => {
+              if (err) res.status(500).json(err);
+              res.render('project/list', {
+                title: 'PMS Dashboard',
+                url: 'project',
+                user: req.session.user,
+                query: req.query,
+                page,
+                pages,
+                link,
+                dataUser: data.rows.map(item => item),
+                dataProject: projectData.rows.map(item => item),
+                projectMessage: req.flash('projectMessage'),
+                option: dataOption.rows[0].optionproject
+              })
             })
           })
         })
@@ -96,12 +102,13 @@ module.exports = (pool) => {
   
   // for option table
   router.post("/option", isLoggedIn, (req, res, next) => {
-    let option = [];
-    option.push(req.body)
-
-    console.log(option)
+    const user = req.session.user;
+    let sqlUpdateOption = `UPDATE users SET optionproject='${JSON.stringify(req.body)}' WHERE userid=${user.userid}`;
     
-    res.redirect('/project');
+    pool.query(sqlUpdateOption, (err) => {
+      if (err) res.status(500).json(err);
+      res.redirect('/project');
+    })
   })
 
   // to add project page
