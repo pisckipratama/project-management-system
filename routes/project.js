@@ -298,7 +298,7 @@ module.exports = (pool) => {
             data: dataMembers.rows,
             projectid,
             page,
-            pages,
+            totalPage: pages,
             link,
             title: 'PMS Dashboard',
             user,
