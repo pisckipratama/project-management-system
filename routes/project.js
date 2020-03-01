@@ -358,5 +358,16 @@ module.exports = (pool) => {
     })
   })
 
+  router.post('/member/:projectid/add', isLoggedIn, (req, res, next) => {
+    const {projectid} = req.params
+    let data = [req.body.inputMember, req.body.inputPosition];
+    console.log(data);
+    let sql = `INSERT INTO members(userid, role, projectid) VALUES($1, $2, ${projectid})`
+    pool.query(sql, data, (err) => {
+      if (err) res.status(500).json(err);
+      res.redirect(`/project/member/${projectid}`)
+    })
+  })
+
   return router
 };
