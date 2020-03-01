@@ -329,5 +329,20 @@ module.exports = (pool) => {
     })
   })
 
+  router.get('/member/:projectid/add', isLoggedIn, (req, res, next) => {
+    const user = req.session.user;
+    const {projectid} = req.params;
+    let sqlShow = `SELECT * FROM projects WHERE projectid=${projectid}`
+    pool.query(sqlShow, (err, data) => {
+      res.render('member/add', {
+        user,
+        title: 'PMS Dashboard',
+        url: 'project',
+        url2: 'member',
+        result: data.rows[0]
+      })
+    })
+  })
+
   return router
 };
