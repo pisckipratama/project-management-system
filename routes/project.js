@@ -318,10 +318,15 @@ module.exports = (pool) => {
     });
   })
 
-  router.post('/member/:id', isLoggedIn, (req, res, next) => {
-    console.log(req.body)
+  router.post('/member/:projectid', isLoggedIn, (req, res, next) => {
+    const user = req.session.user
     const {projectid} = req.params;
-    res.redirect(`/`);
+    let sqlUpdateOption = `UPDATE users SET optionmember='${JSON.stringify(req.body)}' WHERE userid=${user.userid}`;
+
+    pool.query(sqlUpdateOption, err => {
+      if (err) res.status(500).json(err)
+      res.redirect(`/project/member/${projectid}`);
+    })
   })
 
   return router
