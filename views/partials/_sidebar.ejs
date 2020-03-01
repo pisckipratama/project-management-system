@@ -4,10 +4,16 @@
   <div class="col-2" style="background-color: #f1f1f1;">
     <br>
     <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-      <a class="nav-link <%= url2 == 'overview' ? 'active' : '' %>" href="/project/overview/<%= result.projectid %>">Overview</a>
-      <a class="nav-link <%= url2 == 'activity' ? 'active' : '' %>" href="/project/<%= result.projectid %>/activity">Activity</a>
+      <a href="/project" class="btn btn-sm btn-secondary" role="button" aria-pressed="true"> <span
+          aria-hidden="true">&laquo;</span> Back to main menu</a> <br>
+      <a class="nav-link <%= url2 == 'overview' ? 'active' : '' %>"
+        href="/project/overview/<%= result.projectid %>">Overview</a>
+      <a class="nav-link <%= url2 == 'activity' ? 'active' : '' %>"
+        href="/project/<%= result.projectid %>/activity">Activity</a>
       <br>
-      <a class="nav-link <%= url2 == 'member' ? 'active' : '' %>" href="/project/member/<%= result.projectid %>">Members</a>
-      <a class="nav-link <%= url2 == 'issues' ? 'active' : '' %>" href="/project/overview/<%= result.projectid %>">Issues</a>
+      <a class="nav-link <%= url2 == 'member' ? 'active' : '' %>"
+        href="/project/member/<%= result.projectid %>">Members</a>
+      <a class="nav-link <%= url2 == 'issues' ? 'active' : '' %>"
+        href="/project/overview/<%= result.projectid %>">Issues</a>
     </div>
   </div>
