@@ -408,5 +408,17 @@ module.exports = (pool) => {
     })
   })
 
+  // for deleting member at member page
+  router.get('/member/:projectid/delete/:memberid', isLoggedIn, (req, res, next) => {
+    const {projectid, memberid} = req.params
+
+    let sqlDelete = `DELETE FROM members WHERE projectid=${projectid} AND id=${memberid}`
+    console.log(sqlDelete)
+    pool.query(sqlDelete, err => {
+      if (err) res.status(500).json(err)
+      res.redirect(`/project/member/${projectid}`)
+    })
+  })
+
   return router
 };
