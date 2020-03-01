@@ -13,7 +13,8 @@
       <div class="form-group row">
         <label for="inputMember" class="col-sm-2 col-form-label">Member</label>
         <div class="col-sm-10">
-          <input type="name" class="form-control" id="inputMember" name="inputMember">
+          <input type="name" class="form-control" id="inputMember" name="inputMember"
+            value="<%= dataUser.firstname %> <%= dataUser.lastname %>" readonly>
         </div>
       </div>
 
@@ -22,21 +23,22 @@
           <legend class="col-form-label col-sm-2 pt-0">Position</legend>
           <div class="col-sm-10">
             <div class="form-check">
-              <input class="form-check-input" type="radio" name="inputPosition" id="gridRadios1" value="Manager">
+              <input class="form-check-input" type="radio" name="inputPosition" id="gridRadios1" value="Manager"
+                <%= dataUser.role == 'Manager' ? 'checked' : '' %>>
               <label class="form-check-label" for="gridRadios1">
                 Manager
               </label>
             </div>
             <div class="form-check">
               <input class="form-check-input" type="radio" name="inputPosition" id="gridRadios2"
-                value="Software Developer">
+                value="Software Developer" <%= dataUser.role == 'Software Developer' ? 'checked' : '' %> >
               <label class="form-check-label" for="gridRadios2">
                 Software Developer
               </label>
             </div>
             <div class="form-check disabled">
               <input class="form-check-input" type="radio" name="inputPosition" id="gridRadios3"
-                value="Quality Assurance">
+                value="Quality Assurance" <%= dataUser.role == 'Quality Assurance' ? 'checked' : '' %> >
               <label class="form-check-label" for="gridRadios3">
                 Quality Assurance
               </label>
@@ -47,7 +49,7 @@
 
       <div class="form-group row">
         <div class="col-sm-10">
-          <button type="submit" class="btn btn" style="background-color: #321a75; color: #fff;">Add</button>
+          <button type="submit" class="btn btn" style="background-color: #321a75; color: #fff;">Edit</button>
           <a class="btn btn-warning" href="/project/member/<%= result.projectid %>" role="button">Back</a>
         </div>
       </div>

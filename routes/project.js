@@ -380,13 +380,31 @@ module.exports = (pool) => {
 
     pool.query(sqlShow, (err, data) => {
       if(err) res.status(500).json(err)
-      res.render('member/edit', {
-        user,
-        title: 'PMS Dashboard',
-        url: 'project',
-        url2: 'member',
-        result: data.rows[0]
+
+      let sqlData = `SELECT users.firstname, users.lastname, members.role, members.id FROM members LEFT JOIN users ON users.userid = members.userid LEFT JOIN projects ON projects.projectid = members.projectid WHERE projects.projectid=${projectid} AND id=${memberid}`
+      pool.query(sqlData, (err, dataUsers) => {
+        if (err) res.status(500).json(err);
+        res.render('member/edit', {
+          user,
+          title: 'PMS Dashboard',
+          url: 'project',
+          url2: 'member',
+          result: data.rows[0],
+          dataUser: dataUsers.rows[0]
+        })
       })
+    })
+  })
+
+  // to post edit member page
+  router.post('/member/:projectid/edit/:memberid', isLoggedIn, (req, res, next) => {
+    const {projectid, memberid} = req.params;
+    let data = [req.body.inputPosition, memberid]
+
+    let sqlEdit = `UPDATE members SET role=$1 WHERE id=$2`;
+    pool.query(sqlEdit, data, (err) => {
+      if (err) res.status(500).json(err)
+      res.redirect(`/project/member/${projectid}`)
     })
   })
 
