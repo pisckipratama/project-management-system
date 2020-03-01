@@ -252,19 +252,63 @@ module.exports = (pool) => {
   router.get('/member/:projectid', isLoggedIn, (req, res, next) => {
     const {projectid} = req.params;
     const user = req.session.user;
-
-    let sqlShow = `SELECT * FROM projects WHERE projectid=${projectid}`;
     
-    pool.query(sqlShow, (err, data) => {
-      res.render('member/list', {
-        title: 'PMS Dashboard',
-        user,
-        url: 'project',
-        url2: 'member',
-        result: data.rows[0]
+    // variable for pagination
+    const link = (req.url == `/member/${projectid}`) ? `/member/${projectid}/?page=1` : req.url;
+    let page = req.query.page || 1;
+    let limit = 3;
+    let offset = (page - 1) * limit
+
+    // variable for filtering
+    const {checkID, checkName, checkPosition, inputID, inputName, inputPosition} = req.query;
+    let filter = [];
+
+    if (checkID && inputID) {
+      filter.push(`members.id=${inputID}`);
+    }
+    if (checkName && inputName) {
+      filter.push(`CONCAT (users.firstname,' ',users.lastname) ILIKE '%${inputName}%'`);
+    }
+    if (checkPosition && inputPosition) {
+      filter.push(`member.role='${inputPosition}'`);
+    }
+
+    let sql = `SELECT COUNT(*) AS total FROM members WHERE members.projectid=${projectid}`;
+    if (filter.length > 0) {
+      sql += `AND ${filter.join(" AND ")}`;
+    }
+
+    pool.query(sql, (err, count) => {
+      if (err) res.status(500).json(err);
+      const total = count.rows[0].total;
+      const pages = Math.ceil(total / limit);
+      let sqlMember = `SELECT projects.projectid, members.id, members.role, CONCAT(users.firstname,' ',users.lastname) AS fullname FROM members LEFT JOIN projects ON projects.projectid = members.projectid LEFT JOIN users ON users.userid = members.userid WHERE members.projectid = ${projectid}`;
+      if (filter.length > 0) {
+        sqlMember += `AND ${filter.join(' AND ')}`
+      }
+      sqlMember += ` ORDER BY members.id LIMIT ${limit} OFFSET ${offset}`
+
+      pool.query(sqlMember, (err, dataMembers) => {
+        if (err) res.status(500).json(err);
+        let sqlShow = `SELECT * FROM projects WHERE projectid=${projectid}`;
+        pool.query(sqlShow, (err, data) => {
+          if (err) res.status(500).json(err);
+          res.render('member/list', {
+            data: dataMembers.rows,
+            projectid,
+            page,
+            pages,
+            link,
+            title: 'PMS Dashboard',
+            user,
+            url: 'project',
+            url2: 'member',
+            result: data.rows[0]
+          })
+        })
       })
-    })
-    })
+    });
+  })
 
   return router
 };
