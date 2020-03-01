@@ -319,6 +319,7 @@ module.exports = (pool) => {
     });
   })
 
+  // post option at member page
   router.post('/member/:projectid', isLoggedIn, (req, res, next) => {
     const user = req.session.user
     const {projectid} = req.params;
@@ -330,6 +331,7 @@ module.exports = (pool) => {
     })
   })
 
+  // landing to add member page at member page
   router.get('/member/:projectid/add', isLoggedIn, (req, res, next) => {
     const user = req.session.user;
     const {projectid} = req.params;
@@ -358,6 +360,7 @@ module.exports = (pool) => {
     })
   })
 
+  // to post add member at member page
   router.post('/member/:projectid/add', isLoggedIn, (req, res, next) => {
     const {projectid} = req.params
     let data = [req.body.inputMember, req.body.inputPosition];
