@@ -372,5 +372,23 @@ module.exports = (pool) => {
     })
   })
 
+  // landing to edit page at member page
+  router.get('/member/:projectid/edit/:memberid', isLoggedIn, (req, res, next) => {
+    const {projectid, memberid} = req.params;
+    const user = req.session.user
+    let sqlShow = `SELECT * FROM projects WHERE projectid=${projectid}`
+
+    pool.query(sqlShow, (err, data) => {
+      if(err) res.status(500).json(err)
+      res.render('member/edit', {
+        user,
+        title: 'PMS Dashboard',
+        url: 'project',
+        url2: 'member',
+        result: data.rows[0]
+      })
+    })
+  })
+
   return router
 };

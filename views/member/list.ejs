@@ -106,7 +106,7 @@
           <td <%= option.chkname ? '' : 'hidden' %>><%= item.fullname %></td>
           <td <%= option.chkposition ? '' : 'hidden' %>><%= item.role %></td>
           <td>
-            <a class="btn btn-success btn-sm" href="#" role="button">Edit</a>
+            <a class="btn btn-success btn-sm" href="/project/member/<%= result.projectid %>/edit/<%= item.id %>" role="button">Edit</a>
             <a class="btn btn-danger btn-sm delete"
               onclick="return confirm('Are you sure you want to delete this item?');" href="#">Delete</a>
           </td>
