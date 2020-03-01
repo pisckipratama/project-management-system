@@ -5,7 +5,193 @@
   <h2 class="text-center"> Issues <small class="text-muted">#<%= result.projectid %> <%= result.name %></small></h2>
   <hr>
 
-</div>
+  <div class="container-fluid">
+    <h3>Filter</h3>
+    <form method="GET">
+      <input type="hidden" name="page" value="1">
+      <div class="form-group row">
+        <label for="inputID" class="col-sm-2 col-form-label"> <input id="inputID" type="checkbox" name="checkID">
+          ID</label>
+        <div class="col-sm-10">
+          <input type="text" class="form-control" name="inputID" placeholder="Issue ID">
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="inputSubject" class="col-sm-2 col-form-label"> <input id="inputSubject" type="checkbox"
+            name="checkSubject">
+          Subject</label>
+        <div class="col-sm-10">
+          <input type="text" class="form-control" name="inputSubject" placeholder="Subject Issue">
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <label for="inputTracker" class="col-sm-2 col-form-label"> <input id="inputTracker" type="checkbox" name="checkTracker">
+          Tracker</label>
+        <div class="col-sm-10">
+          <select class="custom-select" name="inputTracker">
+            <option value="">Choose Issue Tracker</option>
+            <option value="Bug">Bug</option>
+            <option value="Feature">Feature</option>
+            <option value="Support">Support</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <div class="col-sm-10">
+          <button type="submit" class="btn" style="background-color: #321a75; color: #fff;">Search</button>
+          <a class="btn btn-success" href="/project/member/<%= result.projectid %>" role="button">Show All</a>
+        </div>
+      </div>
+    </form>
+
+    <hr>
+
+    <h3>Options</h3>
+    <form method="POST">
+      <div class="row">
+        <div class="col-sm-2">
+          <p>Columns</p>
+        </div>
+        <div class="col-sm-2">
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="chkid" value="true" id="chkid">
+            <label class="form-check-label" for="chkid">ID</label>
+          </div>
+          <div class="form-check">
+            <input type="checkbox" class="form-check-input" id="chktracker" name="chktracker" value="true">
+            <label class="form-check-label" for="chktracker">Tracker</label>
+          </div>
+          <div class="form-check">
+            <input type="checkbox" class="form-check-input" id="chksubject" name="chksubject" value="true">
+            <label class="form-check-label" for="chksubject">Subject</label>
+          </div>
+        </div>
+
+        <div class="col-sm-2">
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="chkdesc" value="true" id="chkdesc">
+            <label class="form-check-label" for="chkdesc">Description</label>
+          </div>
+          <div class="form-check">
+            <input type="checkbox" class="form-check-input" id="chkstat" name="chkstat" value="true">
+            <label class="form-check-label" for="chkstat">Status</label>
+          </div>
+          <div class="form-check">
+            <input type="checkbox" class="form-check-input" id="chkpriority" name="chkpriority" value="true">
+            <label class="form-check-label" for="chkpriority">Priority</label>
+          </div>
+        </div>
+
+        <div class="col-sm-2">
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="chkassignee" name="chkassignee" value="true">
+            <label class="form-check-label" for="chkassignee">Assignee</label>
+          </div>
+          <div class="form-check">
+            <input type="checkbox" class="form-check-input" id="chkstartdate" name="chkstartdate" value="true">
+            <label class="form-check-label" for="chkstartdate">Start Date</label>
+          </div>
+          <div class="form-check">
+            <input type="checkbox" class="form-check-input" id="chkduedate" name="chkduedate" value="true">
+            <label class="form-check-label" for="chkduedate">Due Date</label>
+          </div>
+        </div>
+
+        <div class="col-sm-2">
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="chkestimated" name="chkestimated" value="true">
+            <label class="form-check-label" for="chkestimated">Estimated</label>
+          </div>
+          <div class="form-check">
+            <input type="checkbox" class="form-check-input" id="chkdone" name="chkdone" value="true">
+            <label class="form-check-label" for="chkdone">Done</label>
+          </div>
+          <div class="form-check">
+            <input type="checkbox" class="form-check-input" id="chkauthor" name="chkauthor" value="true">
+            <label class="form-check-label" for="chkauthor">Author</label>
+          </div>
+        </div>
+
+      </div>
+      <div class="form-group row">
+        <div class="col-sm-10">
+          <button type="submit" class="btn btn" style="background-color: #321a75; color: #fff;">Apply</button>
+        </div>
+      </div>
+    </form>
+
+    <div class="table-responsive">
+      <table class="table">
+        <thead>
+          <tr class="table-active">
+            <th scope="col">ID</th>
+            <th scope="col">Tracker</th>
+            <th scope="col">Subject</th>
+            <th scope="col">Description</th>
+            <th scope="col">Status</th>
+            <th scope="col">Priority</th>
+            <th scope="col">Assignee</th>
+            <th scope="col">Start Date</th>
+            <th scope="col">Due Date</th>
+            <th scope="col">Estimated Time (hours)</th>
+            <th scope="col">Done (%)</th>
+            <th scope="col">File</th>
+            <th scope="col">Author</th>
+            <th scope="col">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% dataIssues.forEach(item => { %>
+          <tr>
+            <th scope="row"><%= item.issueid %></th>
+            <td><%= item.tracker %></td>
+            <td><%= item.subject %></td>
+            <td><%= item.description %></td>
+            <td><%= item.status %></td>
+            <td><%= item.priority %></td>
+            <td><%= item.fullname %></td>
+            <td><%= moment(item.startdate).format('LL') %></td>
+            <td><%= moment(item.duedate).format('LL') %></td>
+            <td><%= item.estimatedate %></td>
+            <td><%= item.done %></td>
+            <td><%= item.files %></td>
+            <td><%= item.authorname %></td>
+            <td>
+              <a class="btn btn-success btn-sm" href="#" role="button">Edit</a>
+              <a class="btn btn-danger btn-sm delete"
+                onclick="return confirm('Are you sure you want to delete this item?');" href="#">Delete</a>
+            </td>
+          </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+    
+    <br>
+
+    <nav aria-label="Page navigation example">
+      <ul class="pagination justify-content-center">
+        <li class="page-item">
+          <a class="page-link" href="#" aria-label="Previous">
+            <span aria-hidden="true">&laquo;</span>
+          </a>
+        </li>
+        <li class="page-item"><a class="page-link" href="#">1</a></li>
+        <li class="page-item"><a class="page-link" href="#">2</a></li>
+        <li class="page-item"><a class="page-link" href="#">3</a></li>
+        <li class="page-item">
+          <a class="page-link" href="#" aria-label="Next">
+            <span aria-hidden="true">&raquo;</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <a class="btn" style="background-color: #321a75; color: #fff;" href="/project/member/<%= result.projectid %>/add"
+      role="button">Add</a>
+  </div>
 </div>
 
 <%- include("../partials/_footer") %>

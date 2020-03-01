@@ -1,6 +1,8 @@
 // import depedencies
 const express = require('express');
 const router = express.Router();
+const moment = require('moment')
+moment.locale('id')
 
 // cofigure middleware for session
 const isLoggedIn = (req, res, next) => {
@@ -424,18 +426,73 @@ module.exports = (pool) => {
   router.get('/issues/:projectid', isLoggedIn, (req, res, next) => {
     const {projectid} = req.params
     const user = req.session.user
+    const {checkID, inputID, checkSubject, inputSubject, checkTracker, inputTracker} = req.query;
+    let filter = [];
+    const url = (req.url == `/issues/${projectid}` ? `/issues/${projectid}/?page=1` : req.url);
+    let page = req.query.page || 1;
+    let limit = 3;
+    let offset = (page - 1) * limit;
 
-    let sqlShow = `SELECT * FROM projects WHERE projectid=${projectid}`
-    pool.query(sqlShow, (err, data) => {
+    if (checkID && inputID) {
+      filter.push(`issues.issueid=${inputID}`)
+    }
+    if (checkSubject && inputSubject) {
+      filter.push(`issues.subject ILIKE '${inputSubject}'`)
+    }
+    if (checkTracker && inputTracker) {
+      filter.push(`issues.tracker='${inputTracker}'`)
+    }
+
+    let sqlLoad = `SELECT COUNT(*) AS total FROM issues WHERE projectid=${projectid}`;
+
+    if (filter.length > 0) {
+      sqlLoad += ` AND ${filter.join(" AND ")}`
+    }
+
+    pool.query(sqlLoad, (err, count) => {
       if (err) res.status(500).json(err)
-      res.render('issues/list', {
-        user,
-        title: 'PMS Dashboard',
-        url: 'project',
-        url2: 'member',
-        result: data.rows[0]
+      const total = count.rows[0].total;
+      const pages = Math.ceil(total / limit)
+
+      let sqlIssues = `SELECT users.userid, CONCAT(users.firstname,' ',users.lastname) fullname, i1.issueid, i1.projectid, i1.tracker, i1.subject, i1.description, i1.status, i1.priority, i1.assignee, i1.startdate, i1.duedate, i1.estimatedate, i1.done, i1.files, i1.spenttime,i1.targetversion, i1.author, CONCAT(u2.firstname, ' ', u2.lastname) authorname, i1.createdate, i1.updatedate, i1.closedate, i1.parenttask, i2.subject namaparentissue FROM issues i1 LEFT JOIN users ON i1.assignee=users.userid LEFT JOIN users u2 ON i1.author=u2.userid LEFT JOIN issues i2 ON i1.parenttask = i2.issueid WHERE i1.projectid=${projectid}`
+      
+      if (filter.length < 0) {
+        sqlIssues += ` AND ${filter.join(' AND ')}`
+      }
+      sqlIssues += ` ORDER BY i1.issueid LIMIT ${limit} OFFSET ${offset}`
+
+      let sqlShow = `SELECT * FROM projects WHERE projectid=${projectid}`
+      pool.query(sqlShow, (err, data) => {
+        if (err) res.status(500).json(err)
+        
+        pool.query(sqlIssues, (err, dataIssue) => {
+          if (err) res.status(500).json(err)
+
+          let sqlOption = `SELECT optionissues FROM users WHERE userid=${user.userid}`;
+          pool.query(sqlOption, (err, option) => {
+            if (err) res.status(500).json(err);
+            res.render('issues/list', {
+              user,
+              link: url,
+              title: 'PMS Dashboard',
+              url: 'project',
+              url2: 'issues',
+              result: data.rows[0],
+              dataIssues: dataIssue.rows,
+              page,
+              pages,
+              query: req.query,
+              projectid,
+              option: option.rows[0],
+              moment
+            })
+          })
+        })
       })
     })
   })
+
+  // for option column issues page
+
   return router
 };
