@@ -334,12 +334,19 @@ module.exports = (pool) => {
     const {projectid} = req.params;
     let sqlShow = `SELECT * FROM projects WHERE projectid=${projectid}`
     pool.query(sqlShow, (err, data) => {
-      res.render('member/add', {
-        user,
-        title: 'PMS Dashboard',
-        url: 'project',
-        url2: 'member',
-        result: data.rows[0]
+      if (err) res.status(500).json(err);
+
+      let sql = `SELECT userid, email, CONCAT(firstname,' ',lastname) AS fullname FROM users WHERE userid NOT IN (SELECT userid FROM members WHERE projectid=${projectid})`;
+      pool.query(sql, (err, dataUsers) => {
+        if (err) res.status(500).json(err);
+        res.render('member/add', {
+          user,
+          title: 'PMS Dashboard',
+          url: 'project',
+          url2: 'member',
+          result: data.rows[0],
+          dataUser: dataUsers.rows
+        })
       })
     })
   })
