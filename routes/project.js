@@ -270,7 +270,7 @@ module.exports = (pool) => {
       filter.push(`CONCAT (users.firstname,' ',users.lastname) ILIKE '%${inputName}%'`);
     }
     if (checkPosition && inputPosition) {
-      filter.push(`member.role='${inputPosition}'`);
+      filter.push(`members.role='${inputPosition}'`);
     }
 
     let sql = `SELECT COUNT(member) as total  FROM (SELECT members.userid FROM members JOIN users ON members.userid = users.userid WHERE members.projectid = ${projectid}`;
