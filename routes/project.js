@@ -292,23 +292,36 @@ module.exports = (pool) => {
       pool.query(sqlMember, (err, dataMembers) => {
         if (err) res.status(500).json(err);
         let sqlShow = `SELECT * FROM projects WHERE projectid=${projectid}`;
+        
         pool.query(sqlShow, (err, data) => {
           if (err) res.status(500).json(err);
-          res.render('member/list', {
-            data: dataMembers.rows,
-            projectid,
-            page,
-            totalPage: pages,
-            link,
-            title: 'PMS Dashboard',
-            user,
-            url: 'project',
-            url2: 'member',
-            result: data.rows[0]
+
+          let sqlOption = `SELECT optionmember FROM users WHERE userid=${user.userid}`;
+          pool.query(sqlOption, (err, option) => {
+            if (err) res.status(500).json(err);
+            res.render('member/list', {
+              data: dataMembers.rows,
+              projectid,
+              page,
+              totalPage: pages,
+              link,
+              title: 'PMS Dashboard',
+              user,
+              url: 'project',
+              url2: 'member',
+              result: data.rows[0],
+              option: option.rows[0].optionmember
+            })
           })
         })
       })
     });
+  })
+
+  router.post('/member/:id', isLoggedIn, (req, res, next) => {
+    console.log(req.body)
+    const {projectid} = req.params;
+    res.redirect(`/`);
   })
 
   return router
