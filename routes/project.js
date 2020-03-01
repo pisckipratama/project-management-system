@@ -310,7 +310,8 @@ module.exports = (pool) => {
               url: 'project',
               url2: 'member',
               result: data.rows[0],
-              option: option.rows[0].optionmember
+              option: option.rows[0].optionmember,
+              memberMessage: req.flash('memberMessage')
             })
           })
         })
@@ -339,14 +340,20 @@ module.exports = (pool) => {
       let sql = `SELECT userid, email, CONCAT(firstname,' ',lastname) AS fullname FROM users WHERE userid NOT IN (SELECT userid FROM members WHERE projectid=${projectid})`;
       pool.query(sql, (err, dataUsers) => {
         if (err) res.status(500).json(err);
-        res.render('member/add', {
-          user,
-          title: 'PMS Dashboard',
-          url: 'project',
-          url2: 'member',
-          result: data.rows[0],
-          dataUser: dataUsers.rows
-        })
+        if (dataUsers.rows.length > 0) {
+          res.render('member/add', {
+            user,
+            title: 'PMS Dashboard',
+            url: 'project',
+            url2: 'member',
+            result: data.rows[0],
+            dataUser: dataUsers.rows,
+            memberMessage: req.flash('memberMessage')
+          })
+        } else {
+          req.flash('memberMessage', `Member on ${data.rows[0].name} is full`)
+          res.redirect(`/project/member/${projectid}`);
+        }
       })
     })
   })

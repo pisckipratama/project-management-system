@@ -4,6 +4,15 @@
 
   <h2 class="text-center"> Members on <small>#<%= result.projectid %> <%= result.name %></small></h2>
   <hr>
+  
+  <% if (memberMessage.length > 0) {%>
+  <div class="alert alert-primary alert-dismissible fade show" role="alert">
+    <%= memberMessage %>
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <% } %>
 
   <div class="container-fluid">
     <h3>Filter</h3>
@@ -52,19 +61,22 @@
         <div class="col-sm-2">Columns</div>
         <div class="col-sm-10">
           <div class="form-check">
-            <input class="form-check-input" type="checkbox" id="checkID" name="chkid" value="true" <%= option.chkid ? 'checked' : '' %> >
+            <input class="form-check-input" type="checkbox" id="checkID" name="chkid" value="true"
+              <%= option.chkid ? 'checked' : '' %>>
             <label class="form-check-label" for="checkID">
               ID
             </label>
           </div>
           <div class="form-check">
-            <input class="form-check-input" type="checkbox" id="checkName" name="chkname" value="true" <%= option.chkname ? 'checked' : '' %> >
+            <input class="form-check-input" type="checkbox" id="checkName" name="chkname" value="true"
+              <%= option.chkname ? 'checked' : '' %>>
             <label class="form-check-label" for="checkName">
               Name
             </label>
           </div>
           <div class="form-check">
-            <input class="form-check-input" type="checkbox" id="checkPosition" name="chkposition" value="true" <%= option.chkposition ? 'checked' : '' %> >
+            <input class="form-check-input" type="checkbox" id="checkPosition" name="chkposition" value="true"
+              <%= option.chkposition ? 'checked' : '' %>>
             <label class="form-check-label" for="checkPosition">
               Position
             </label>
@@ -81,18 +93,18 @@
     <table class="table table-striped">
       <thead>
         <tr>
-          <th scope="col" <%= option.chkid ? '' : 'hidden' %> >ID</th>
-          <th scope="col" <%= option.chkname ? '' : 'hidden' %> >Name</th>
-          <th scope="col" <%= option.chkposition ? '' : 'hidden' %> >Position</th>
+          <th scope="col" <%= option.chkid ? '' : 'hidden' %>>ID</th>
+          <th scope="col" <%= option.chkname ? '' : 'hidden' %>>Name</th>
+          <th scope="col" <%= option.chkposition ? '' : 'hidden' %>>Position</th>
           <th scope="col">Action</th>
         </tr>
       </thead>
       <tbody>
         <% data.forEach(item => { %>
         <tr>
-          <th scope="row" <%= option.chkid ? '' : 'hidden' %> ><%= item.id %></th>
-          <td <%= option.chkname ? '' : 'hidden' %> ><%= item.fullname %></td>
-          <td <%= option.chkposition ? '' : 'hidden' %> ><%= item.role %></td>
+          <th scope="row" <%= option.chkid ? '' : 'hidden' %>><%= item.id %></th>
+          <td <%= option.chkname ? '' : 'hidden' %>><%= item.fullname %></td>
+          <td <%= option.chkposition ? '' : 'hidden' %>><%= item.role %></td>
           <td>
             <a class="btn btn-success btn-sm" href="#" role="button">Edit</a>
             <a class="btn btn-danger btn-sm delete"
@@ -127,7 +139,8 @@
       </ul>
     </nav>
 
-    <a class="btn" style="background-color: #321a75; color: #fff;" href="/project/member/<%= result.projectid %>/add" role="button">Add</a>
+    <a class="btn" style="background-color: #321a75; color: #fff;" href="/project/member/<%= result.projectid %>/add"
+      role="button">Add</a>
   </div>
 </div>
 </div>
