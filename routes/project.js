@@ -273,10 +273,11 @@ module.exports = (pool) => {
       filter.push(`member.role='${inputPosition}'`);
     }
 
-    let sql = `SELECT COUNT(*) AS total FROM members WHERE members.projectid=${projectid}`;
+    let sql = `SELECT COUNT(member) as total  FROM (SELECT members.userid FROM members JOIN users ON members.userid = users.userid WHERE members.projectid = ${projectid}`;
     if (filter.length > 0) {
-      sql += `AND ${filter.join(" AND ")}`;
+      sql += ` AND ${filter.join(" AND ")}`;
     }
+    sql += ') AS member'
 
     pool.query(sql, (err, count) => {
       if (err) res.status(500).json(err);
@@ -284,7 +285,7 @@ module.exports = (pool) => {
       const pages = Math.ceil(total / limit);
       let sqlMember = `SELECT projects.projectid, members.id, members.role, CONCAT(users.firstname,' ',users.lastname) AS fullname FROM members LEFT JOIN projects ON projects.projectid = members.projectid LEFT JOIN users ON users.userid = members.userid WHERE members.projectid = ${projectid}`;
       if (filter.length > 0) {
-        sqlMember += `AND ${filter.join(' AND ')}`
+        sqlMember += ` AND ${filter.join(' AND ')}`
       }
       sqlMember += ` ORDER BY members.id LIMIT ${limit} OFFSET ${offset}`
 
