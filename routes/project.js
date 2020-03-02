@@ -15,6 +15,8 @@ const isLoggedIn = (req, res, next) => {
 
 module.exports = (pool) => {
 
+  // *** project page (main page) *** //
+
   // to landing main page, filter data projects, and pagination
   router.get('/', isLoggedIn, function (req, res, next) {
     const {checkID, checkName, checkMember, inputID, inputName, inputMember} = req.query;
@@ -226,7 +228,9 @@ module.exports = (pool) => {
       res.redirect('/project');
     })
   })
-  
+
+  // *** overview page *** //
+
   // to landing overview page
   router.get('/overview/:projectid', isLoggedIn, (req, res, next) => {
     const {projectid} = req.params;
@@ -246,6 +250,8 @@ module.exports = (pool) => {
         });
       })
     })
+
+  // *** member page *** //
 
   // to landing member page
   router.get('/member/:projectid', isLoggedIn, (req, res, next) => {
@@ -418,6 +424,8 @@ module.exports = (pool) => {
     })
   })
 
+  // *** issue page *** //
+
   // for landing to issues page
   router.get('/issues/:projectid', isLoggedIn, (req, res, next) => {
     const {projectid} = req.params
@@ -587,7 +595,15 @@ module.exports = (pool) => {
     res.redirect(`/project/issues/${projectid}`)
   })
 
+  router.get('/issues/:projectid/delete/:issueid', isLoggedIn, (req, res, next) => {
+    const { projectid, issueid } = req.params;
+    let sql1 = `SELECT * FROM issues WHERE issueid=${issueid}`
+    pool.query(sql1, (err, data) => {
+      let sql2 = ``
+    })
+  })
 
+  // *** activity page *** //
 
   return router
 };
