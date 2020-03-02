@@ -7,10 +7,10 @@
   <hr>
 
   <div class="container-fluid">
-    <h3>Add Issue</h3>
+    <h3>New Issue</h3>
     <div class="card">
       <div class="card-body">
-        <form>
+        <form method="POST">
           <fieldset class="form-group">
             <div class="row">
               <legend class="col-form-label col-sm-2 pt-0">Tracker</legend>
@@ -40,14 +40,14 @@
           <div class="form-group row">
             <label for="inputSubject" class="col-sm-2 col-form-label">Subject</label>
             <div class="col-sm-10">
-              <input type="text" class="form-control" id="inputSubject" name="inputSubject" placeholder="Subject Issues">
+              <input type="text" class="form-control" id="inputSubject" name="inputSubject" placeholder="Subject Issues" required>
             </div>
           </div>
 
           <div class="form-group row">
             <label for="inputdesc" class="col-sm-2 col-form-label">Description</label>
             <div class="col-sm-10">
-              <textarea class="form-control" id="inputdesc" name="inputdesc" rows="3" placeholder="Description"></textarea>
+              <textarea class="form-control" id="inputdesc" name="inputdesc" rows="3" placeholder="Description" required></textarea>
             </div>
           </div>
 
@@ -131,7 +131,7 @@
             <label for="inputAssignee" class="col-sm-2 col-form-label">
               Assignee</label>
             <div class="col-sm-10">
-              <select class="custom-select" name="inputAssignee" id="inputAssignee">
+              <select class="custom-select" name="inputAssignee" id="inputAssignee" required>
                 <option value="">Choose Member</option>
                 <option value="bug">Bug</option>
                 <option value="feature">Feature</option>
@@ -143,21 +143,21 @@
           <div class="form-group row">
             <label for="startDate" class="col-sm-2 col-form-label">Start Data</label>
             <div class="col-sm-10">
-              <input type="date" class="form-control" name="inputStartDate" id="startDate">
+              <input type="date" class="form-control" name="inputStartDate" id="startDate" required>
             </div>
           </div>
 
           <div class="form-group row">
             <label for="dueDate" class="col-sm-2 col-form-label">Due Data</label>
             <div class="col-sm-10">
-              <input type="date" class="form-control" name="inputDueDate" id="dueDate">
+              <input type="date" class="form-control" name="inputDueDate" id="dueDate" required>
             </div>
           </div>
 
           <div class="form-group row">
             <label for="inputEstimate" class="col-sm-2 col-form-label">Estimated Time (Hours)</label>
             <div class="col-sm-10">
-              <input type="number" class="form-control" id="inputEstimate" name="inputEstimate" placeholder="Estimated Time">
+              <input type="number" class="form-control" id="inputEstimate" name="inputEstimate" placeholder="Estimated Time" required>
             </div>
           </div>
 
@@ -165,7 +165,7 @@
             <label for="inputAssignee" class="col-sm-2 col-form-label">
               Done (%)</label>
             <div class="col-sm-10">
-              <select class="custom-select" name="inputdone" id="inputdone">
+              <select class="custom-select" name="inputdone" id="inputdone" required>
                 <option value="">Choose Percentage</option>
                 <option value="0%">0%</option>
                 <option value="10%">10%</option>
