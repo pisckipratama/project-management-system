@@ -207,9 +207,6 @@ module.exports = (pool) => {
         }
 
         let sqlInsertMembers = `INSERT INTO members (userid, role, projectid) VALUES ${temp.join(",")}`;
-        console.log(temp)
-        console.log(sqlInsertMembers);
-
         pool.query(sqlInsertMembers, err => {
           res.redirect('/project')
         })
@@ -366,7 +363,7 @@ module.exports = (pool) => {
   router.post('/member/:projectid/add', isLoggedIn, (req, res, next) => {
     const {projectid} = req.params
     let data = [req.body.inputMember, req.body.inputPosition];
-    console.log(data);
+    
     let sql = `INSERT INTO members(userid, role, projectid) VALUES($1, $2, ${projectid})`
     pool.query(sql, data, (err) => {
       if (err) res.status(500).json(err);
@@ -415,7 +412,6 @@ module.exports = (pool) => {
     const {projectid, memberid} = req.params
 
     let sqlDelete = `DELETE FROM members WHERE projectid=${projectid} AND id=${memberid}`
-    console.log(sqlDelete)
     pool.query(sqlDelete, err => {
       if (err) res.status(500).json(err)
       res.redirect(`/project/member/${projectid}`)
@@ -437,7 +433,7 @@ module.exports = (pool) => {
       filter.push(`issues.issueid=${inputID}`)
     }
     if (checkSubject && inputSubject) {
-      filter.push(`issues.subject ILIKE '${inputSubject}'`)
+      filter.push(`issues.subject ILIKE '%${inputSubject}%'`)
     }
     if (checkTracker && inputTracker) {
       filter.push(`issues.tracker='${inputTracker}'`)
@@ -454,12 +450,12 @@ module.exports = (pool) => {
       const total = count.rows[0].total;
       const pages = Math.ceil(total / limit)
 
-      let sqlIssues = `SELECT users.userid, CONCAT(users.firstname,' ',users.lastname) fullname, i1.issueid, i1.projectid, i1.tracker, i1.subject, i1.description, i1.status, i1.priority, i1.assignee, i1.startdate, i1.duedate, i1.estimatedate, i1.done, i1.files, i1.spenttime,i1.targetversion, i1.author, CONCAT(u2.firstname, ' ', u2.lastname) authorname, i1.createdate, i1.updatedate, i1.closedate, i1.parenttask, i2.subject namaparentissue FROM issues i1 LEFT JOIN users ON i1.assignee=users.userid LEFT JOIN users u2 ON i1.author=u2.userid LEFT JOIN issues i2 ON i1.parenttask = i2.issueid WHERE i1.projectid=${projectid}`
+      let sqlIssues = `SELECT users.userid, CONCAT(users.firstname,' ',users.lastname) fullname, issues.issueid, issues.projectid, issues.tracker, issues.subject, issues.description, issues.status, issues.priority, issues.assignee, issues.startdate, issues.duedate, issues.estimatedate, issues.done, issues.files, issues.spenttime,issues.targetversion, issues.author, CONCAT(u2.firstname, ' ', u2.lastname) authorname, issues.createdate, issues.updatedate, issues.closedate, issues.parenttask, i2.subject namaparentissue FROM issues LEFT JOIN users ON issues.assignee=users.userid LEFT JOIN users u2 ON issues.author=u2.userid LEFT JOIN issues i2 ON issues.parenttask = i2.issueid WHERE issues.projectid=${projectid}`
       
-      if (filter.length < 0) {
+      if (filter.length > 0) {
         sqlIssues += ` AND ${filter.join(' AND ')}`
       }
-      sqlIssues += ` ORDER BY i1.issueid LIMIT ${limit} OFFSET ${offset}`
+      sqlIssues += ` ORDER BY issues.issueid LIMIT ${limit} OFFSET ${offset}`
 
       let sqlShow = `SELECT * FROM projects WHERE projectid=${projectid}`
       pool.query(sqlShow, (err, data) => {
