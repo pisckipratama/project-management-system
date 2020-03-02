@@ -543,11 +543,12 @@ module.exports = (pool) => {
       inputFile
     } = req.body
 
-    let data = [projectid, inputTracker, inputSubject, inputdesc, inputstat, inputPriority, inputAssignee, user.userid, inputStartDate, inputDueDate, inputEstimate, inputdone, inputFile]
+    // let data = [projectid, inputTracker, inputSubject, inputdesc, inputstat, inputPriority, inputAssignee, user.userid, inputStartDate, inputDueDate, inputEstimate, inputdone, inputFile]
 
-    let sqlAddIssue = `INSERT INTO issues (projectid,tracker,subject,description,status,priority,assignee,author,startdate,duedate,estimatedate,done,files,spenttime,createdate,updatedate) VALUES($1, '$2', '$3', '$4', '$5', '$6', $7, $8,'$9','$10','$11', $12,'$13','0',NOW(),NOW())`
+    let sqlAddIssue = `INSERT INTO issues (projectid,tracker,subject,description,status,priority,assignee,author,startdate,duedate,estimatedate,done,files,spenttime,createdate,updatedate) VALUES(${projectid}, '${inputTracker}', '${inputSubject}', '${inputdesc}', '${inputstat}', '${inputPriority}', ${inputAssignee}, ${user.userid},'${inputStartDate}','${inputDueDate}','${inputEstimate}', ${inputdone},'${inputFile}','0',NOW(),NOW())`
+    console.log(sqlAddIssue);
 
-    pool.query(sqlAddIssue, data, err => {
+    pool.query(sqlAddIssue, err => {
       if (err) res.status(500).json(err)
       res.redirect(`/project/issues/${projectid}`);
     })
