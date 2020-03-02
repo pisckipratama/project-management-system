@@ -94,10 +94,4 @@ SELECT members.userid, projects.name, projects.projectid
 FROM members LEFT JOIN projects ON projects.projectid = members.projectid
 WHERE projects.projectid = 21
 
-SELECT users.userid, CONCAT(users.firstname,' ',users.lastname) fullname, i1.issueid, i1.projectid, i1.tracker, i1.subject, i1.description, i1.status, i1.priority, i1.assignee, i1.startdate, i1.duedate, i1.estimatedtime, i1.done, i1.files, i1.spenttime,i1.targetversion, i1.author, CONCAT(u2.firstname, ' ', u2.lastname) authorname, i1.createddate, i1.updateddate, i1.closeddate, i1.parenttask, i2.subject namaparentissue
-FROM issues i1 LEFT JOIN users
-ON i1.assignee=users.userid
-LEFT JOIN users u2
-ON i1.author=u2.userid
-LEFT JOIN issues i2
-ON i1.parenttask = i2.issueid WHERE i1.projectid=23;
+SELECT users.userid, CONCAT(users.firstname,' ',users.lastname) fullname, issues.issueid, issues.projectid, issues.tracker, issues.subject, issues.description, issues.status, issues.priority, issues.assignee, issues.startdate, issues.duedate, issues.estimatedate, issues.done, issues.files, issues.spenttime,issues.targetversion, issues.author, CONCAT(u2.firstname, ' ', u2.lastname) authorname, issues.createdate, issues.updatedate, issues.closedate, issues.parenttask, i2.subject namaparentissue FROM issues LEFT JOIN users ON issues.assignee=users.userid LEFT JOIN users u2 ON issues.author=u2.userid LEFT JOIN issues i2 ON issues.parenttask = i2.issueid WHERE issues.projectid=23
