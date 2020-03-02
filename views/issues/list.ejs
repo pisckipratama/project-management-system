@@ -166,7 +166,7 @@
             <td <%= option.chkstartdate ? '' : 'hidden' %>><%= moment(item.startdate).format('LL') %></td>
             <td <%= option.chkduedate ? '' : 'hidden' %>><%= moment(item.duedate).format('LL') %></td>
             <td <%= option.chkestimated ? '' : 'hidden' %>><%= item.estimatedate %></td>
-            <td <%= option.chkdone ? '' : 'hidden' %>><%= item.done %></td>
+            <td <%= option.chkdone ? '' : 'hidden' %>><%= item.done %>%</td>
             <td><%= item.files %></td>
             <td <%= option.chkauthor ? '' : 'hidden' %>><%= item.authorname %></td>
             <td>
