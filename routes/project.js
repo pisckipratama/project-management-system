@@ -501,6 +501,7 @@ module.exports = (pool) => {
     })
   })
 
+  // lading page to add issue
   router.get('/issues/:projectid/add', isLoggedIn, (req, res, next) => {
     const {projectid} = req.params;
     const user = req.session.user
@@ -526,6 +527,7 @@ module.exports = (pool) => {
     })
   })
 
+  // posting data to issues
   router.post('/issues/:projectid/add', isLoggedIn, (req, res, next) => {
     const {projectid} = req.params
     const user = req.session.user;
@@ -543,8 +545,6 @@ module.exports = (pool) => {
       inputFile
     } = req.body
 
-    // let data = [projectid, inputTracker, inputSubject, inputdesc, inputstat, inputPriority, inputAssignee, user.userid, inputStartDate, inputDueDate, inputEstimate, inputdone, inputFile]
-
     let sqlAddIssue = `INSERT INTO issues (projectid,tracker,subject,description,status,priority,assignee,author,startdate,duedate,estimatedate,done,files,spenttime,createdate,updatedate) VALUES(${projectid}, '${inputTracker}', '${inputSubject}', '${inputdesc}', '${inputstat}', '${inputPriority}', ${inputAssignee}, ${user.userid},'${inputStartDate}','${inputDueDate}','${inputEstimate}', ${inputdone},'${inputFile}','0',NOW(),NOW())`
     console.log(sqlAddIssue);
 
@@ -552,8 +552,9 @@ module.exports = (pool) => {
       if (err) res.status(500).json(err)
       res.redirect(`/project/issues/${projectid}`);
     })
-
   })
+
+
   
   return router
 };
