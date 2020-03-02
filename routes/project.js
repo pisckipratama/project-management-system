@@ -500,6 +500,25 @@ module.exports = (pool) => {
       res.redirect(`/project/issues/${projectid}`)
     })
   })
+
+  router.get('/issues/:projectid/add', isLoggedIn, (req, res, next) => {
+    const {projectid} = req.params;
+    const user = req.session.user
+
+    let sqlShow = `SELECT * FROM projects WHERE projectid=${projectid}`
+    pool.query(sqlShow, (err, dataShow) => {
+      if (err) res.status(500).json(err)
+      res.render('issues/add', {
+        user,
+        title: 'PMS Dashboard',
+        url: 'project',
+        url2: 'issues',
+        result: dataShow.rows[0],
+        projectid,
+        moment
+      })
+    })
+  })
   
   return router
 };
