@@ -477,7 +477,7 @@ module.exports = (pool) => {
               result: data.rows[0],
               dataIssues: dataIssue.rows,
               page,
-              pages,
+              totalPage: pages,
               query: req.query,
               projectid,
               option: optionissue.rows[0].optionissues,
