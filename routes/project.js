@@ -578,5 +578,16 @@ module.exports = (pool) => {
     })
   })
   
+  // posting edit issue
+  router.post('/issues/:projectid/edit/:issueid', isLoggedIn, (req, res, next) => {
+    const {projectid} = req.params
+    const user = req.session.user;
+    console.log(req.body)
+
+    res.redirect(`/project/issues/${projectid}`)
+  })
+
+
+
   return router
 };
