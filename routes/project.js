@@ -469,8 +469,9 @@ module.exports = (pool) => {
           if (err) res.status(500).json(err)
 
           let sqlOption = `SELECT optionissues FROM users WHERE userid=${user.userid}`;
-          pool.query(sqlOption, (err, option) => {
+          pool.query(sqlOption, (err, optionissue) => {
             if (err) res.status(500).json(err);
+            
             res.render('issues/list', {
               user,
               link: url,
@@ -483,7 +484,7 @@ module.exports = (pool) => {
               pages,
               query: req.query,
               projectid,
-              option: option.rows[0],
+              option: optionissue.rows[0].optionissues,
               moment
             })
           })
@@ -493,6 +494,16 @@ module.exports = (pool) => {
   })
 
   // for option column issues page
+  router.post('/issues/:projectid', (req, res, next) => {
+    const {projectid} = req.params
+    const user = req.session.user
 
+    let sqlOption = `UPDATE users SET optionissues='${JSON.stringify(req.body)}' WHERE userid=${user.userid}`
+    pool.query(sqlOption, err => {
+      if (err) res.status(500).json(err)
+      res.redirect(`/project/issues/${projectid}`)
+    })
+  })
+  
   return router
 };
