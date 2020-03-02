@@ -586,7 +586,7 @@ module.exports = (pool) => {
     })
   })
   
-  // posting edit issue
+  // posting edit issue - not finish
   router.post('/issues/:projectid/edit/:issueid', isLoggedIn, (req, res, next) => {
     const {projectid} = req.params
     const user = req.session.user;
@@ -595,15 +595,29 @@ module.exports = (pool) => {
     res.redirect(`/project/issues/${projectid}`)
   })
 
+  // delete issue - not finish
   router.get('/issues/:projectid/delete/:issueid', isLoggedIn, (req, res, next) => {
     const { projectid, issueid } = req.params;
     let sql1 = `SELECT * FROM issues WHERE issueid=${issueid}`
-    pool.query(sql1, (err, data) => {
-      let sql2 = ``
+    pool.query(sql1, err => {
+      if (err) res.status(500).json(err)
+      res.redirect(`/project/issues/${projectid}`)
     })
   })
 
   // *** activity page *** //
+  router.get('/activity/:projectid', isLoggedIn, (req, res, next) => {
+    const {projectid} = req.params
+    const user = req.session.user
+    res.render('activity/list', {
+      user,
+      title: 'PMS Dashboard',
+      url: 'project',
+      url2: 'issues',
+      projectid,
+      moment
+    })
+  })
 
   return router
 };
