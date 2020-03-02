@@ -546,15 +546,37 @@ module.exports = (pool) => {
     } = req.body
 
     let sqlAddIssue = `INSERT INTO issues (projectid,tracker,subject,description,status,priority,assignee,author,startdate,duedate,estimatedate,done,files,spenttime,createdate,updatedate) VALUES(${projectid}, '${inputTracker}', '${inputSubject}', '${inputdesc}', '${inputstat}', '${inputPriority}', ${inputAssignee}, ${user.userid},'${inputStartDate}','${inputDueDate}','${inputEstimate}', ${inputdone},'${inputFile}','0',NOW(),NOW())`
-    console.log(sqlAddIssue);
-
     pool.query(sqlAddIssue, err => {
       if (err) res.status(500).json(err)
       res.redirect(`/project/issues/${projectid}`);
     })
   })
 
+  // landing to edit issue page
+  router.get('/issues/:projectid/edit/:issueid', isLoggedIn, (req, res, next) => {
+    const { projectid, issueid } = req.params
+    const user = req.session.user;
 
+    let sqlShowProject = `SELECT * FROM projects WHERE projectid=${projectid}`
+    pool.query(sqlShowProject, (err, data) => {
+      if (err) res.status(500).json(err);
+
+      let sqlLoad = `SELECT projects.projectid, users.userid, users.firstname, users.lastname FROM members LEFT JOIN projects ON projects.projectid = members.projectid LEFT JOIN users ON members.userid = users.userid WHERE members.projectid=${projectid}`;
+      pool.query(sqlLoad, (err, dataIssue) => {
+        if (err) res.status(500).json(err)
+        res.render('issues/edit', {
+          user,
+          title: 'PMS Dashboard',
+          url: 'project',
+          url2: 'issues',
+          result: data.rows[0],
+          projectid,
+          moment,
+          data: dataIssue.rows
+        })
+      })
+    })
+  })
   
   return router
 };
