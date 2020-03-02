@@ -94,4 +94,21 @@ SELECT members.userid, projects.name, projects.projectid
 FROM members LEFT JOIN projects ON projects.projectid = members.projectid
 WHERE projects.projectid = 21
 
-SELECT users.userid, CONCAT(users.firstname,' ',users.lastname) fullname, issues.issueid, issues.projectid, issues.tracker, issues.subject, issues.description, issues.status, issues.priority, issues.assignee, issues.startdate, issues.duedate, issues.estimatedate, issues.done, issues.files, issues.spenttime,issues.targetversion, issues.author, CONCAT(u2.firstname, ' ', u2.lastname) authorname, issues.createdate, issues.updatedate, issues.closedate, issues.parenttask, i2.subject namaparentissue FROM issues LEFT JOIN users ON issues.assignee=users.userid LEFT JOIN users u2 ON issues.author=u2.userid LEFT JOIN issues i2 ON issues.parenttask = i2.issueid WHERE issues.projectid=23
+-- for show issues data
+SELECT users.userid, CONCAT(users.firstname,' ',users.lastname) fullname, issues.issueid, issues.projectid, issues.tracker, issues.subject, issues.description, issues.status, issues.priority, issues.assignee, issues.startdate, issues.duedate, issues.estimatedate, issues.done, issues.files, issues.spenttime,issues.targetversion, issues.author, CONCAT(u2.firstname, ' ', u2.lastname) authorname, issues.createdate, issues.updatedate, issues.closedate, issues.parenttask, i2.subject namaparentissue 
+FROM issues 
+LEFT JOIN users ON issues.assignee=users.userid 
+LEFT JOIN users u2 ON issues.author=u2.userid 
+LEFT JOIN issues i2 ON issues.parenttask = i2.issueid 
+WHERE issues.projectid=23
+
+-- for add issue
+INSERT INTO issues (projectid,tracker,subject,description,status,priority,assignee,author,startdate,duedate,estimatedate,done,files,spenttime,createdate,updatedate)
+VALUES(23, 'bug', 'error when load data', 'data not showing when loaded at vue.js', 'New', 'High', 2, 1,'2020-03-02','2020-03-03','24', 10,'bug.jpg','0',NOW(),NOW())
+
+-- for showing data at add page
+SELECT projects.projectid, users.userid, users.firstname, users.lastname
+FROM members 
+LEFT JOIN projects ON projects.projectid = members.projectid 
+LEFT JOIN users ON members.userid = users.userid
+WHERE members.projectid=23
