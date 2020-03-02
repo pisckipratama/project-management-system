@@ -133,9 +133,9 @@
             <div class="col-sm-10">
               <select class="custom-select" name="inputAssignee" id="inputAssignee" required>
                 <option value="">Choose Member</option>
-                <option value="bug">Bug</option>
-                <option value="feature">Feature</option>
-                <option value="support">Support</option>
+                <% data.forEach(item => { %>
+                <option value="<%= item.userid %>"><%= item.firstname %> <%= item.lastname %></option>
+                <% }) %>
               </select>
             </div>
           </div>

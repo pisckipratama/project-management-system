@@ -508,16 +508,50 @@ module.exports = (pool) => {
     let sqlShow = `SELECT * FROM projects WHERE projectid=${projectid}`
     pool.query(sqlShow, (err, dataShow) => {
       if (err) res.status(500).json(err)
-      res.render('issues/add', {
-        user,
-        title: 'PMS Dashboard',
-        url: 'project',
-        url2: 'issues',
-        result: dataShow.rows[0],
-        projectid,
-        moment
+
+      let sqlLoad = `SELECT projects.projectid, users.userid, users.firstname, users.lastname FROM members LEFT JOIN projects ON projects.projectid = members.projectid LEFT JOIN users ON members.userid = users.userid WHERE members.projectid=${projectid}`
+      pool.query(sqlLoad, (err, dataUser) => {
+        if (err) res.status(500).json(err)
+        res.render('issues/add', {
+          user,
+          title: 'PMS Dashboard',
+          url: 'project',
+          url2: 'issues',
+          result: dataShow.rows[0],
+          projectid,
+          moment,
+          data: dataUser.rows
+        })
       })
     })
+  })
+
+  router.post('/issues/:projectid/add', isLoggedIn, (req, res, next) => {
+    const {projectid} = req.params
+    const user = req.session.user;
+    const {
+      inputTracker,
+      inputSubject,
+      inputdesc,
+      inputstat,
+      inputPriority,
+      inputAssignee,
+      inputStartDate,
+      inputDueDate,
+      inputEstimate,
+      inputdone,
+      inputFile
+    } = req.body
+
+    let data = [projectid, inputTracker, inputSubject, inputdesc, inputstat, inputPriority, inputAssignee, user.userid, inputStartDate, inputDueDate, inputEstimate, inputdone, inputFile]
+
+    let sqlAddIssue = `INSERT INTO issues (projectid,tracker,subject,description,status,priority,assignee,author,startdate,duedate,estimatedate,done,files,spenttime,createdate,updatedate) VALUES($1, '$2', '$3', '$4', '$5', '$6', $7, $8,'$9','$10','$11', $12,'$13','0',NOW(),NOW())`
+
+    pool.query(sqlAddIssue, data, err => {
+      if (err) res.status(500).json(err)
+      res.redirect(`/project/issues/${projectid}`);
+    })
+
   })
   
   return router
