@@ -609,13 +609,18 @@ module.exports = (pool) => {
   router.get('/activity/:projectid', isLoggedIn, (req, res, next) => {
     const {projectid} = req.params
     const user = req.session.user
-    res.render('activity/list', {
-      user,
-      title: 'PMS Dashboard',
-      url: 'project',
-      url2: 'issues',
-      projectid,
-      moment
+
+    let sqlShow = `SELECT * FROM projects WHERE projectid=${projectid}`
+    pool.query(sqlShow, (err, data) => {
+      res.render('activity/list', {
+        user,
+        title: 'PMS Dashboard',
+        url: 'project',
+        url2: 'activity',
+        projectid,
+        moment,
+        result: data.rows[0]
+      })
     })
   })
 
