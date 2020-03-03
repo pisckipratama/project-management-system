@@ -591,18 +591,25 @@ module.exports = (pool) => {
     pool.query(sqlShowProject, (err, data) => {
       if (err) res.status(500).json(err);
 
-      let sqlLoad = `SELECT projects.projectid, users.userid, users.firstname, users.lastname FROM members LEFT JOIN projects ON projects.projectid = members.projectid LEFT JOIN users ON members.userid = users.userid WHERE members.projectid=${projectid}`;
-      pool.query(sqlLoad, (err, dataIssue) => {
+      let sqlShowIssue = `SELECT users.userid, CONCAT(users.firstname,' ',users.lastname) fullname, issues.issueid, issues.projectid, issues.tracker, issues.subject, issues.description, issues.status, issues.priority, issues.assignee, issues.startdate, issues.duedate, issues.estimatedate, issues.done, issues.files, issues.spenttime,issues.targetversion, issues.author, CONCAT(u2.firstname, ' ', u2.lastname) authorname, issues.createdate, issues.updatedate, issues.closedate, issues.parenttask, i2.subject namaparentissue FROM issues LEFT JOIN users ON issues.assignee=users.userid LEFT JOIN users u2 ON issues.author=u2.userid LEFT JOIN issues i2 ON issues.parenttask = i2.issueid WHERE issues.projectid=${projectid} AND issues.issueid=${issueid}`
+      let sqlShowUser = `SELECT userid, email, CONCAT(firstname, ' ', lastname) AS fullname FROM users WHERE userid IN (SELECT userid FROM members WHERE projectid = ${projectid})`
+      pool.query(sqlShowIssue, (err, dataIssue) => {
         if (err) res.status(500).json(err)
-        res.render('issues/edit', {
-          user,
-          title: 'PMS Dashboard',
-          url: 'project',
-          url2: 'issues',
-          result: data.rows[0],
-          projectid,
-          moment,
-          data: dataIssue.rows
+        pool.query(sqlShowUser, (err, dataUser) => {
+          if (err) res.status(500).json(err)
+          console.log(dataIssue.rows[0])
+          console.log(dataUser.rows[0])
+          res.render('issues/edit', {
+            user,
+            title: 'PMS Dashboard',
+            url: 'project',
+            url2: 'issues',
+            result: data.rows[0],
+            projectid,
+            moment,
+            user: dataUser.rows,
+            data: dataIssue.rows[0]
+          })
         })
       })
     })
