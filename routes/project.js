@@ -85,6 +85,7 @@ module.exports = (pool) => {
             let sqlGetOption = `SELECT optionproject FROM users WHERE userid=${req.session.user.userid}`;
             pool.query(sqlGetOption, (err, dataOption) => {
               if (err) res.status(500).json(err);
+              console.log(req.session.user)
               res.render('project/list', {
                 title: 'PMS Dashboard',
                 url: 'project',
