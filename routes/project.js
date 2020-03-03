@@ -597,8 +597,6 @@ module.exports = (pool) => {
         if (err) res.status(500).json(err)
         pool.query(sqlShowUser, (err, dataUser) => {
           if (err) res.status(500).json(err)
-          console.log(dataIssue.rows[0])
-          console.log(dataUser.rows[0])
           res.render('issues/edit', {
             user,
             title: 'PMS Dashboard',
@@ -617,11 +615,69 @@ module.exports = (pool) => {
   
   // posting edit issue - not finish
   router.post('/issues/:projectid/edit/:issueid', isLoggedIn, (req, res, next) => {
-    const {projectid} = req.params
+    const { projectid, issueid } = req.params
     const user = req.session.user;
-    console.log(req.body)
+    const { 
+      tracker,
+      subject,
+      description,
+      status,
+      priority,
+      assignee,
+      startdate,
+      duedate,
+      estimatedtime,
+      done,
+      spenttime,
+      targetversion,
+      parenttask
+    } = req.body
 
-    res.redirect(`/project/issues/${projectid}`)
+    let sqlEditIssue = ''
+
+    if (!req.files || Object.keys(req.files).length === 0) {
+      if (status == 'Closed') {
+        sqlEditIssue = `UPDATE issues SET tracker='${tracker}', subject='${subject}', description='${description}', status='${status}', priority='${priority}', startdate='${startdate}', duedate='${duedate}', estimatedate='${estimatedtime}', done=${done}, spenttime='${spenttime}', targetversion='${targetversion}', updatedate = now(), closedate = now(), assignee=${assignee} WHERE issueid=${issueid}`
+      } else {
+        sqlEditIssue = `UPDATE issues SET tracker='${tracker}', subject='${subject}', description='${description}', status='${status}', priority='${priority}', startdate='${startdate}', duedate='${duedate}', estimatedate='${estimatedtime}', done=${done}, spenttime='${spenttime}', targetversion='${targetversion}', updatedate = now(), assignee=${assignee} WHERE issueid=${issueid}`
+      }
+    
+      let sqlAddActivity = `INSERT INTO activity (time, title, description,projectid, author) VALUES (NOW(), '[${status}] [${tracker}] ${subject} - Done: ${done}%', '${description}', ${projectid}, ${user.userid})`
+      pool.query(sqlEditIssue, err => {
+        if (err) res.status(500).json(err)
+        
+        console.log(sqlEditIssue)
+        console.log(sqlAddActivity)
+        pool.query(sqlAddActivity, err => {
+          if (err) res.status(500).json(err)
+          res.redirect(`/project/issues/${projectid}`)
+        })
+      })
+    } else {
+      let sampleFile = req.files.sampleFile;
+      let nameFile = sampleFile.name.replace(/ /g, "-");
+      nameFile = `${moment().format('YYYYMMDD')}_${nameFile}`;
+
+      sqlEditIssue = `UPDATE issues SET tracker='${tracker}', subject='${subject}', description=${description}, status='${status}', priority='${priority}', startdate='${startdate}', duedate='${duedate}', estimatedate='${estimatedtime}', done=${done}, spenttime='${spenttime}', targetversion='${targetversion}', parenttask=${parenttask}, updatedate = now(), assignee=${assignee}, files=${nameFile} WHERE issueid=${issueid}`
+
+
+
+      pool.query(sqlEditIssue, err => {
+        if (err) res.status(500).json(err)
+        sampleFile.mv(path.join(__dirname, `../public/pictures/${nameFile}`), err => {
+          if (err) return res.status(500).send(err);
+          let sqlAddActivity = `INSERT INTO activity (time, title, description,projectid, author) VALUES (NOW(), '[${status}] [${tracker}] ${subject} - Done: ${done}%', '${description}', ${projectid}, ${user.userid})`
+          pool.query(sqlEditIssue, err => {
+            if (err) res.status(500).json(err)
+
+            pool.query(sqlAddActivity, err => {
+              if (err) res.status(500).json(err)
+              res.redirect(`/project/issues/${projectid}`)
+            })
+          })
+        });
+      });
+    }
   })
 
   // delete issue - not finish
