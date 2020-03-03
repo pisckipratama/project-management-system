@@ -553,10 +553,16 @@ module.exports = (pool) => {
       inputFile
     } = req.body
 
-    let sqlAddIssue = `INSERT INTO issues (projectid,tracker,subject,description,status,priority,assignee,author,startdate,duedate,estimatedate,done,files,spenttime,createdate,updatedate) VALUES(${projectid}, '${inputTracker}', '${inputSubject}', '${inputdesc}', '${inputstat}', '${inputPriority}', ${inputAssignee}, ${user.userid},'${inputStartDate}','${inputDueDate}','${inputEstimate}', ${inputdone},'${inputFile}','0',NOW(),NOW())`
-    pool.query(sqlAddIssue, err => {
+    let sqlAddActivity = `INSERT INTO activity (time, title, description,projectid, author) VALUES (NOW(), '${inputSubject}', '[${inputstat}] [${inputTracker}] ${inputSubject} #${projectid} - Done: ${inputdone}%', ${projectid}, ${user.userid})`
+    pool.query(sqlAddActivity, (err) => {
+    console.log(sqlAddActivity)
       if (err) res.status(500).json(err)
-      res.redirect(`/project/issues/${projectid}`);
+      
+      let sqlAddIssue = `INSERT INTO issues (projectid,tracker,subject,description,status,priority,assignee,author,startdate,duedate,estimatedate,done,files,spenttime,createdate,updatedate) VALUES(${projectid}, '${inputTracker}', '${inputSubject}', '${inputdesc}', '${inputstat}', '${inputPriority}', ${inputAssignee}, ${user.userid},'${inputStartDate}','${inputDueDate}','${inputEstimate}', ${inputdone},'${inputFile}','0',NOW(),NOW())`
+      pool.query(sqlAddIssue, err => {
+        if (err) res.status(500).json(err)
+        res.redirect(`/project/issues/${projectid}`);
+      })
     })
   })
 
