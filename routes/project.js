@@ -553,7 +553,7 @@ module.exports = (pool) => {
       inputdone,
     } = req.body
 
-    let sqlAddActivity = `INSERT INTO activity (time, title, description,projectid, author) VALUES (NOW(), '${inputSubject}', '[${inputstat}] [${inputTracker}] ${inputSubject} #${projectid} - Done: ${inputdone}%', ${projectid}, ${user.userid})`
+    let sqlAddActivity = `INSERT INTO activity (time, title, description,projectid, author) VALUES (NOW(), '${inputSubject}', '[${inputstat}] [${inputTracker}] ${inputSubject} - Done: ${inputdone}%', ${projectid}, ${user.userid})`
     pool.query(sqlAddActivity, (err) => {
       if (err) res.status(500).json(err)
 
@@ -642,7 +642,7 @@ module.exports = (pool) => {
         sqlEditIssue = `UPDATE issues SET tracker='${tracker}', subject='${subject}', description='${description}', status='${status}', priority='${priority}', startdate='${startdate}', duedate='${duedate}', estimatedate='${estimatedtime}', done=${done}, spenttime='${spenttime}', targetversion='${targetversion}', updatedate = now(), assignee=${assignee} WHERE issueid=${issueid}`
       }
     
-      let sqlAddActivity = `INSERT INTO activity (time, title, description,projectid, author) VALUES (NOW(), '[${status}] [${tracker}] ${subject} - Done: ${done}%', '${description}', ${projectid}, ${user.userid})`
+      let sqlAddActivity = `INSERT INTO activity (time, title, description,projectid, author) VALUES (NOW(), '${subject}', '[${status}] [${tracker}] ${subject} - Done: ${done}%', ${projectid}, ${user.userid})`
       pool.query(sqlEditIssue, err => {
         if (err) res.status(500).json(err)
         
@@ -659,9 +659,6 @@ module.exports = (pool) => {
       nameFile = `${moment().format('YYYYMMDD')}_${nameFile}`;
 
       sqlEditIssue = `UPDATE issues SET tracker='${tracker}', subject='${subject}', description=${description}, status='${status}', priority='${priority}', startdate='${startdate}', duedate='${duedate}', estimatedate='${estimatedtime}', done=${done}, spenttime='${spenttime}', targetversion='${targetversion}', parenttask=${parenttask}, updatedate = now(), assignee=${assignee}, files=${nameFile} WHERE issueid=${issueid}`
-
-
-
       pool.query(sqlEditIssue, err => {
         if (err) res.status(500).json(err)
         sampleFile.mv(path.join(__dirname, `../public/pictures/${nameFile}`), err => {
