@@ -4,32 +4,22 @@
 
   <h2 class="text-center"> Activity <small class="text-muted">#<%= result.projectid %> <%= result.name %></small></h2>
   <hr>
-  <div class="card">
-    <div class="card-body">
-
-      <div class="card">
-        <h5 class="card-header">Today</h5>
-        <div class="card-body">
-          <span class="badge badge-primary">15:40 WIB</span>
-          <h4 class="card-title">[Support] Hapus akun Trial</h4>
-          <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-          <a href="#" class="btn btn-primary">Go somewhere</a>
-        </div>
-      </div>
-
-      <br>
-
-      <div class="card">
-        <h5 class="card-header">Featured</h5>
-        <div class="card-body">
-          <h5 class="card-title">Special title treatment</h5>
-          <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-          <a href="#" class="btn btn-primary">Go somewhere</a>
-        </div>
-      </div>
-
+  <% activitydate.forEach((item) => { %>
+  <div class="card bg-light mb-3" style="max-width: 60rem;">
+    <div class="card-header">
+      <strong><%= item.date %></strong>
     </div>
+    <% item.data.forEach((list) => { %>
+    <div class="card-body">
+      <p class="card-text">
+        <span class="badge badge-primary"><%= list.timeactivity %></span><br />
+        <strong><%= list.title %></strong> - <%= list.description %><br />
+        Author: <%= list.author %>
+      </p>
+    </div>
+    <% }) %>
   </div>
+  <% }) %>
 
 </div>
 </div>

@@ -756,19 +756,62 @@ module.exports = (pool) => {
     const {projectid} = req.params
     const user = req.session.user
 
-    let sqlShow = `SELECT * FROM projects WHERE projectid=${projectid}`
-    pool.query(sqlShow, (err, data) => {
-      if (err) res.status(500).json(err)
+    let sqlAct = `SELECT (time AT TIME ZONE 'Asia/Jakarta' AT TIME ZONE 'asia/jakarta')::DATE dateactivity, (time AT TIME ZONE 'Asia/Jakarta' AT time zone 'asia/jakarta')::time timeactivity, title, description, author FROM activity WHERE projectid = ${projectid}`
+    let sqlProjectName = `SELECT DISTINCT members.projectid, projects.name projectname FROM members INNER JOIN projects USING (projectid) INNER JOIN users USING (userid) WHERE projectid=${projectid}`
 
-      
-      res.render('activity/list', {
-        user,
-        title: 'PMS Dashboard',
-        url: 'project',
-        url2: 'activity',
-        projectid,
-        moment,
-        result: data.rows[0]
+    function convertDateTerm(date) {
+      date = moment(date).format('YYYY-MM-DD')
+      const today = moment().format('YYYY-MM-DD')
+      const yesterday = moment().subtract(1, "days").format("YYYY-MM-DD");
+      if (date == today) {
+        return "Today";
+      } else if (date == yesterday) {
+        return "Yesterday"
+      }
+      return moment(date).format("MMMM Do, YYYY")
+    }
+    
+    pool.query(sqlAct, (err, response) => {
+      if (err) res.status(500).json(err)
+      pool.query(sqlProjectName, (err, result) => {
+        if (err) res.status(500).json(err)
+        let dataProject = result.rows;
+        let dataActivity = response.rows;
+        dataActivity = dataActivity.map(data => {
+          data.dateactivity = moment(data.dateactivity).format('YYYY-MM-DD')
+          data.timeactivity = moment(data.timeactivity, 'HH:mm:ss.SSS').format('HH:mm:ss')
+          return data
+        })
+
+        let dateonly = dataActivity.map(data => data.dateactivity)
+        dateunix = dateonly.filter((date, index, arr) => {
+          return arr.indexOf(date) == index
+        })
+
+        let activitydate = dateunix.map(date => {
+          let dataindate = dataActivity.filter(item => item.dateactivity == date);
+          return {
+            date: convertDateTerm(date),
+            data: dataindate
+          }
+        })
+
+        projectname = dataProject.map(data => data.projectname)
+
+        let sqlShow = `SELECT * FROM projects WHERE projectid=${projectid}`
+        pool.query(sqlShow, (err, show) => {
+          if (err) res.status(500).json(err);
+          res.render('activity/list', {
+            user,
+            title: 'PMS Dashboard',
+            url: 'project',
+            url2: 'activity',
+            projectid,
+            moment,
+            activitydate,
+            result: show.rows[0]
+          })
+        })
       })
     })
   })
