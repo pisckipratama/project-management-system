@@ -238,19 +238,70 @@ module.exports = (pool) => {
     const user = req.session.user;
     
     let sqlShow = `SELECT * FROM projects WHERE projectid=${projectid}`;
+    let sql1 = `SELECT * FROM members JOIN projects ON (members.projectid=${projectid} AND projects.projectid=${projectid}) JOIN users ON members.userid = users.userid`;
+    let sql2 = `SELECT * FROM issues WHERE projectid=${projectid}`
+    
+    pool.query(sqlShow, (err, data) => {
+      if (err) res.status(500).json(err);
 
-      pool.query(sqlShow, (err, data) => {
-        if (err) res.status(500).json(err);
+      pool.query(sql1, (err, dataUser) => {
+        if (err) res.status(500).json(err)
+        
+        pool.query(sql2, (err, issues) => {
+          if (err) res.status(500).json(err)
+          let bugOpen = 0;
+          let bugTotal = 0;
+          let featureOpen = 0;
+          let featureTotal = 0;
+          let supportOpen = 0;
+          let supportTotal = 0;
 
-        res.render('overview/list', {
-          title: 'PMS Dashboard',
-          user,
-          url: 'project',
-          url2: 'overview',
-          result: data.rows[0]
-        });
+          issues.rows.forEach((item, index) => {
+            if (item.tracker == 'bug' && item.status !== "Closed") {
+              bugOpen += 1;
+            }
+            if (item.tracker == 'bug') {
+              bugTotal += 1;
+            }
+          })
+
+          issues.rows.forEach((item, index) => {
+            if (item.tracker == 'feature' && item.status !== "Closed") {
+              featureOpen += 1;
+            }
+            if (item.tracker == 'feature') {
+              featureTotal += 1;
+            }
+          })
+
+          issues.rows.forEach((item, index) => {
+            if (item.tracker == 'support' && item.status !== "Closed") {
+              supportOpen += 1;
+            }
+            if (item.tracker == 'support') {
+              supportTotal += 1;
+            }
+          })
+
+          res.render('overview/list', {
+            title: 'PMS Dashboard',
+            user,
+            url: 'project',
+            url2: 'overview',
+            result: data.rows[0],
+            supportOpen,
+            supportTotal,
+            bugOpen,
+            bugTotal,
+            featureOpen,
+            featureTotal,
+            data: dataUser.rows,
+            issues: issues.rows
+          });
+        })
       })
     })
+  })
 
   // *** member page *** //
 
