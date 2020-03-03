@@ -58,8 +58,11 @@ CREATE TABLE activity(
   time TIMESTAMP,
   title VARCHAR(50),
   description TEXT,
-  author VARCHAR(50)
+  author VARCHAR(50),
+  projectid INT,
+  FOREIGN KEY (projectid) REFERENCES projects(projectid)
 )
+
 SELECT DISTINCT projects.projectid, projects.name FROM projects
 LEFT JOIN members ON projects.projectid = members.projectid;
 
@@ -112,3 +115,18 @@ FROM members
 LEFT JOIN projects ON projects.projectid = members.projectid 
 LEFT JOIN users ON members.userid = users.userid
 WHERE members.projectid=23
+
+-- for add activity
+INSERT INTO activity(time, title, description,projectid, author) 
+VALUES (NOW(), 'error at line 29', 'New Issue Created : Tracker : [Bug] Subject : error at line 29 - (New) - Done: 0%', 23,1)
+
+-- for show user at edit issue
+SELECT userid, email, CONCAT(firstname, ' ', lastname) AS fullname 
+FROM users 
+WHERE userid IN (SELECT userid FROM members WHERE projectid = 23)
+
+-- for show activity add activity page
+SELECT * , (SELECT CONCAT(firstname, ' ', lastname) AS author
+FROM users
+WHERE userid = activity.author AND projectid = 13) 
+FROM activity WHERE projectid = 13 ORDER BY activityid DESC
