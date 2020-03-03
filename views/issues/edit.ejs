@@ -193,14 +193,14 @@
           <div class="form-group row">
             <label for="inputspent" class="col-sm-2 col-form-label">Spent Time</label>
             <div class="col-sm-10">
-              <input type="number" class="form-control" id="inputspent" name="inputspent" value="<%= data.spenttime %>">
+              <input type="number" class="form-control" id="inputspent" name="inputspent" value="<%= data.spenttime %>" required>
             </div>
           </div>
 
           <div class="form-group row">
             <label for="inputtargetversion" class="col-sm-2 col-form-label">Target Version</label>
             <div class="col-sm-10">
-              <input type="text" class="form-control" id="inputtargetversion" name="inputtargetversion" value="1.0">
+              <input type="text" class="form-control" id="inputtargetversion" name="inputtargetversion" value="1.0" required>
             </div>
           </div>
 
@@ -208,27 +208,6 @@
             <label for="inputauthor" class="col-sm-2 col-form-label">Author</label>
             <div class="col-sm-10">
               <input type="text" class="form-control" id="inputauthor" name="inputauthor" value="<%= data.authorname %>" readonly>
-            </div>
-          </div>
-
-          <div class="form-group row">
-            <label for="inputcratedate" class="col-sm-2 col-form-label">Created Date</label>
-            <div class="col-sm-10">
-              <input type="date" class="form-control" id="inputcratedate" name="inputcratedate" value="<%= moment(data.createdate).format('YYYY-MM-DD') %>">
-            </div>
-          </div>
-
-          <div class="form-group row">
-            <label for="inputupdatedate" class="col-sm-2 col-form-label">Update Date</label>
-            <div class="col-sm-10">
-              <input type="date" class="form-control" id="inputupdatedate" name="inputupdatedate" value="<%= moment(data.updatedate).format('YYYY-MM-DD') %>" >
-            </div>
-          </div>
-
-          <div class="form-group row">
-            <label for="inputclosedate" class="col-sm-2 col-form-label">Closed Date</label>
-            <div class="col-sm-10">
-              <input type="date" class="form-control" id="inputclosedate" name="inputclosedate">
             </div>
           </div>
 
