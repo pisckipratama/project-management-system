@@ -169,7 +169,11 @@
             <td <%= option.chkduedate ? '' : 'hidden' %>><%= moment(item.duedate).format('LL') %></td>
             <td <%= option.chkestimated ? '' : 'hidden' %>><%= item.estimatedate %></td>
             <td <%= option.chkdone ? '' : 'hidden' %>><%= item.done %>%</td>
-            <td><%= item.files %></td>
+            <td>
+              <a href="/pictures/<%= item.files %>">
+                <img src="/pictures/<%= item.files %>" alt="" srcset="" width="80px">
+              </a>
+            </td>
             <td <%= option.chkauthor ? '' : 'hidden' %>><%= item.authorname %></td>
             <td>
               <a class="btn btn-success btn-sm" href="/project/issues/<%= result.projectid %>/edit/<%= item.issueid %>"
