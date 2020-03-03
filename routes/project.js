@@ -2,6 +2,7 @@
 const express = require('express');
 const router = express.Router();
 const moment = require('moment')
+const path = require('path');
 moment.locale('id')
 
 // cofigure middleware for session
@@ -550,19 +551,34 @@ module.exports = (pool) => {
       inputDueDate,
       inputEstimate,
       inputdone,
-      inputFile
     } = req.body
 
     let sqlAddActivity = `INSERT INTO activity (time, title, description,projectid, author) VALUES (NOW(), '${inputSubject}', '[${inputstat}] [${inputTracker}] ${inputSubject} #${projectid} - Done: ${inputdone}%', ${projectid}, ${user.userid})`
     pool.query(sqlAddActivity, (err) => {
-    console.log(sqlAddActivity)
       if (err) res.status(500).json(err)
-      
-      let sqlAddIssue = `INSERT INTO issues (projectid,tracker,subject,description,status,priority,assignee,author,startdate,duedate,estimatedate,done,files,spenttime,createdate,updatedate) VALUES(${projectid}, '${inputTracker}', '${inputSubject}', '${inputdesc}', '${inputstat}', '${inputPriority}', ${inputAssignee}, ${user.userid},'${inputStartDate}','${inputDueDate}','${inputEstimate}', ${inputdone},'${inputFile}','0',NOW(),NOW())`
-      pool.query(sqlAddIssue, err => {
-        if (err) res.status(500).json(err)
-        res.redirect(`/project/issues/${projectid}`);
-      })
+
+      if (!req.files || Object.keys(req.files).length === 0) {
+
+        let sqlAddIssue = `INSERT INTO issues (projectid,tracker,subject,description,status,priority,assignee,author,startdate,duedate,estimatedate,done,files,spenttime,createdate,updatedate) VALUES(${projectid}, '${inputTracker}', '${inputSubject}', '${inputdesc}', '${inputstat}', '${inputPriority}', ${inputAssignee}, ${user.userid},'${inputStartDate}','${inputDueDate}','${inputEstimate}', ${inputdone}, 'null','0',NOW(),NOW())`
+        pool.query(sqlAddIssue, err => {
+          if (err) res.status(500).json(err)
+          res.redirect(`/project/issues/${projectid}`);
+        });
+      } else {
+        let sampleFile = req.files.sampleFile;
+        let nameFile = sampleFile.name.replace(/ /g, "-");
+        nameFile = `${moment().format('YYYYMMDD')}_${nameFile}`;
+
+        let sqlAddIssue = `INSERT INTO issues (projectid,tracker,subject,description,status,priority,assignee,author,startdate,duedate,estimatedate,done,files,spenttime,createdate,updatedate) VALUES(${projectid}, '${inputTracker}', '${inputSubject}', '${inputdesc}', '${inputstat}', '${inputPriority}', ${inputAssignee}, ${user.userid},'${inputStartDate}','${inputDueDate}','${inputEstimate}', ${inputdone}, '${nameFile}','0',NOW(),NOW())`
+        pool.query(sqlAddIssue, err => {
+          if (err) res.status(500).json(err)
+          sampleFile.mv(path.join(__dirname, `../public/pictures/${nameFile}`), err => {
+              if (err) return res.status(500).send(err);
+              res.redirect(`/project/issues/${projectid}`)
+            }
+          );
+        });
+      }
     })
   })
 
