@@ -553,7 +553,7 @@ module.exports = (pool) => {
       inputdone,
     } = req.body
 
-    let sqlAddActivity = `INSERT INTO activity (time, title, description,projectid, author) VALUES (NOW(), '${inputSubject}', '[${inputstat}] [${inputTracker}] ${inputSubject} - Done: ${inputdone}%', ${projectid}, ${user.userid})`
+    let sqlAddActivity = `INSERT INTO activity (time, title, description,projectid, author) VALUES (NOW(), 'Issue Created', '[${inputstat}] [${inputTracker}] ${inputSubject} - Done: ${inputdone}%', ${projectid}, '${user.firstname} ${user.lastname}')`
     pool.query(sqlAddActivity, (err) => {
       if (err) res.status(500).json(err)
 
@@ -642,7 +642,7 @@ module.exports = (pool) => {
         sqlEditIssue = `UPDATE issues SET tracker='${tracker}', subject='${subject}', description='${description}', status='${status}', priority='${priority}', startdate='${startdate}', duedate='${duedate}', estimatedate='${estimatedtime}', done=${done}, spenttime='${spenttime}', targetversion='${targetversion}', updatedate = now(), assignee=${assignee} WHERE issueid=${issueid}`
       }
     
-      let sqlAddActivity = `INSERT INTO activity (time, title, description,projectid, author) VALUES (NOW(), '${subject}', '[${status}] [${tracker}] ${subject} - Done: ${done}%', ${projectid}, ${user.userid})`
+      let sqlAddActivity = `INSERT INTO activity (time, title, description,projectid, author) VALUES (NOW(), 'Issue Updated', '[${status}] [${tracker}] ${subject} - Done: ${done}%', ${projectid}, '${user.firstname} ${user.lastname}')`
       pool.query(sqlEditIssue, err => {
         if (err) res.status(500).json(err)
         
@@ -663,7 +663,7 @@ module.exports = (pool) => {
         if (err) res.status(500).json(err)
         sampleFile.mv(path.join(__dirname, `../public/pictures/${nameFile}`), err => {
           if (err) return res.status(500).send(err);
-          let sqlAddActivity = `INSERT INTO activity (time, title, description,projectid, author) VALUES (NOW(), '[${status}] [${tracker}] ${subject} - Done: ${done}%', '${description}', ${projectid}, ${user.userid})`
+          let sqlAddActivity = `INSERT INTO activity (time, title, description,projectid, author) VALUES (NOW(), 'Issue Updated', '[${status}] [${tracker}] ${subject} - Done: ${done}%', ${projectid}, '${user.firstname} ${user.lastname}')`
           pool.query(sqlEditIssue, err => {
             if (err) res.status(500).json(err)
 
@@ -680,10 +680,23 @@ module.exports = (pool) => {
   // delete issue - not finish
   router.get('/issues/:projectid/delete/:issueid', isLoggedIn, (req, res, next) => {
     const { projectid, issueid } = req.params;
+    const user = req.session.user
     let sql1 = `SELECT * FROM issues WHERE issueid=${issueid}`
-    pool.query(sql1, err => {
+    pool.query(sql1, (err, data) => {
       if (err) res.status(500).json(err)
-      res.redirect(`/project/issues/${projectid}`)
+      let result = data.rows[0]
+
+      let sql2 = `INSERT INTO activity (time, title, description,projectid, author) VALUES (NOW(), 'Issue Deleted', '[${result.status}] [${result.tracker}] ${result.subject} - Done: ${result.done}%', ${projectid}, '${user.firstname} ${user.lastname}')`
+      console.log(sql2)
+      pool.query(sql2, err => {
+        if (err) res.status(500).json(err)
+
+        let sql3 = `DELETE FROM issues WHERE issueid=${issueid} AND projectid=${projectid}`
+        pool.query(sql3, err => {
+          if (err) res.status(500).json(err)
+          res.redirect(`/project/issues/${projectid}`)
+        })
+      })
     })
   })
 
@@ -694,6 +707,9 @@ module.exports = (pool) => {
 
     let sqlShow = `SELECT * FROM projects WHERE projectid=${projectid}`
     pool.query(sqlShow, (err, data) => {
+      if (err) res.status(500).json(err)
+
+      
       res.render('activity/list', {
         user,
         title: 'PMS Dashboard',
