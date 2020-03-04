@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const bodyParser = require('body-parser');
+const bcrypt = require('bcrypt')
+const saltRounds = 10;
 
 router.use(bodyParser.urlencoded({
   extended: false
@@ -17,24 +19,22 @@ module.exports = pool => {
 
   router.post('/', (req, res, next) => {
     const { email, password } = req.body;
-    let sqlLoad = `SELECT * FROM users`;
+    let sqlLoad = `SELECT * FROM users WHERE email='${email}'`;
     pool.query(sqlLoad, (err, data) => {
       if (err) res.status(500).send(err)
-      let result = data.rows.map(item => item)
-      
-      for (const property in result) {
-        if (email === result[property].email) {
-          if (password === result[property].password) {
-            req.session.user = result[property]
-            return res.redirect('/project')
-          } else {
-            req.flash('loginMessage', 'wrong password.')
-            return res.redirect('/')
-          }
+      let result = data.rows[0]
+
+      if (email === result.email) {
+        if (password === result.password) {
+          req.session.user = result
+          return res.redirect('/project')
+        } else {
+          req.flash('loginMessage', 'wrong password.')
+          return res.redirect('/')
         }
       }
       req.flash('loginMessage', 'wrong or username not found.')
-      res.redirect('/')      
+      res.redirect('/')
     })
   });
 
