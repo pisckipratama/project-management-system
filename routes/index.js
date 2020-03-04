@@ -23,18 +23,23 @@ module.exports = pool => {
     pool.query(sqlLoad, (err, data) => {
       if (err) res.status(500).send(err)
       let result = data.rows[0]
+      let hashpassword = result.password;
+      
+      bcrypt.compare(password, hashpassword, (err, valid) => {
+        if (err) console.error(err)
 
-      if (email === result.email) {
-        if (password === result.password) {
-          req.session.user = result
-          return res.redirect('/project')
-        } else {
-          req.flash('loginMessage', 'wrong password.')
-          return res.redirect('/')
+        if (email === result.email) {
+          if (valid) {
+            req.session.user = result
+            return res.redirect('/project')
+          } else {
+            req.flash('loginMessage', 'wrong password.')
+            return res.redirect('/')
+          }
         }
-      }
-      req.flash('loginMessage', 'wrong or username not found.')
-      res.redirect('/')
+        req.flash('loginMessage', 'wrong or username not found.')
+        res.redirect('/')
+      })
     })
   });
 
