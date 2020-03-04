@@ -283,7 +283,7 @@ module.exports = (pool) => {
             }
           })
 
-          res.render('overview/list', {
+          res.render('project/overview', {
             title: 'PMS Dashboard',
             user,
             url: 'project',
@@ -356,7 +356,7 @@ module.exports = (pool) => {
           let sqlOption = `SELECT optionmember FROM users WHERE userid=${user.userid}`;
           pool.query(sqlOption, (err, option) => {
             if (err) res.status(500).json(err);
-            res.render('member/list', {
+            res.render('project/member/list', {
               data: dataMembers.rows,
               projectid,
               page,
@@ -400,7 +400,7 @@ module.exports = (pool) => {
       pool.query(sql, (err, dataUsers) => {
         if (err) res.status(500).json(err);
         if (dataUsers.rows.length > 0) {
-          res.render('member/add', {
+          res.render('project/member/add', {
             user,
             title: 'PMS Dashboard',
             url: 'project',
@@ -441,7 +441,7 @@ module.exports = (pool) => {
       let sqlData = `SELECT users.firstname, users.lastname, members.role, members.id FROM members LEFT JOIN users ON users.userid = members.userid LEFT JOIN projects ON projects.projectid = members.projectid WHERE projects.projectid=${projectid} AND id=${memberid}`
       pool.query(sqlData, (err, dataUsers) => {
         if (err) res.status(500).json(err);
-        res.render('member/edit', {
+        res.render('project/member/edit', {
           user,
           title: 'PMS Dashboard',
           url: 'project',
@@ -528,7 +528,7 @@ module.exports = (pool) => {
           pool.query(sqlOption, (err, optionissue) => {
             if (err) res.status(500).json(err);
             
-            res.render('issues/list', {
+            res.render('project/issues/list', {
               user,
               link: url,
               title: 'PMS Dashboard',
@@ -573,7 +573,7 @@ module.exports = (pool) => {
       let sqlLoad = `SELECT projects.projectid, users.userid, users.firstname, users.lastname FROM members LEFT JOIN projects ON projects.projectid = members.projectid LEFT JOIN users ON members.userid = users.userid WHERE members.projectid=${projectid}`
       pool.query(sqlLoad, (err, dataUser) => {
         if (err) res.status(500).json(err)
-        res.render('issues/add', {
+        res.render('project/issues/add', {
           user,
           title: 'PMS Dashboard',
           url: 'project',
@@ -648,7 +648,7 @@ module.exports = (pool) => {
         if (err) res.status(500).json(err)
         pool.query(sqlShowUser, (err, dataUser) => {
           if (err) res.status(500).json(err)
-          res.render('issues/edit', {
+          res.render('project/issues/edit', {
             user,
             title: 'PMS Dashboard',
             url: 'project',
@@ -797,7 +797,7 @@ module.exports = (pool) => {
         let sqlShow = `SELECT * FROM projects WHERE projectid=${projectid}`
         pool.query(sqlShow, (err, show) => {
           if (err) res.status(500).json(err);
-          res.render('activity/list', {
+          res.render('project/activity', {
             user,
             title: 'PMS Dashboard',
             url: 'project',

@@ -1,4 +1,4 @@
-<%- include("../partials/_sidebar") %>
+<%- include("../../partials/_sidebar") %>
 
 <div class="col-9">
   <br>
@@ -7,14 +7,19 @@
   <hr>
 
   <div class="container-fluid">
-    <h3>Edit Member</h3>
+    <h3>Add Member</h3>
     <br>
     <form method="POST">
       <div class="form-group row">
-        <label for="inputMember" class="col-sm-2 col-form-label">Member</label>
+        <label for="inputBoolean" class="col-sm-2 col-form-label">
+          Member</label>
         <div class="col-sm-10">
-          <input type="name" class="form-control" id="inputMember" name="inputMember"
-            value="<%= dataUser.firstname %> <%= dataUser.lastname %>" readonly>
+          <select class="custom-select" name="inputMember" required>
+            <option value="">Choose Member</option>
+            <% dataUser.forEach(item => {  %>
+            <option value="<%= item.userid %>"><%= item.fullname %></option>
+            <% }) %>
+          </select>
         </div>
       </div>
 
@@ -23,22 +28,21 @@
           <legend class="col-form-label col-sm-2 pt-0">Position</legend>
           <div class="col-sm-10">
             <div class="form-check">
-              <input class="form-check-input" type="radio" name="inputPosition" id="gridRadios1" value="Manager"
-                <%= dataUser.role == 'Manager' ? 'checked' : '' %>>
+              <input class="form-check-input" type="radio" name="inputPosition" id="gridRadios1" value="Manager">
               <label class="form-check-label" for="gridRadios1">
                 Manager
               </label>
             </div>
             <div class="form-check">
               <input class="form-check-input" type="radio" name="inputPosition" id="gridRadios2"
-                value="Software Developer" <%= dataUser.role == 'Software Developer' ? 'checked' : '' %> >
+                value="Software Developer">
               <label class="form-check-label" for="gridRadios2">
                 Software Developer
               </label>
             </div>
             <div class="form-check disabled">
               <input class="form-check-input" type="radio" name="inputPosition" id="gridRadios3"
-                value="Quality Assurance" <%= dataUser.role == 'Quality Assurance' ? 'checked' : '' %> >
+                value="Quality Assurance">
               <label class="form-check-label" for="gridRadios3">
                 Quality Assurance
               </label>
@@ -49,7 +53,7 @@
 
       <div class="form-group row">
         <div class="col-sm-10">
-          <button type="submit" class="btn btn" style="background-color: #321a75; color: #fff;">Edit</button>
+          <button type="submit" class="btn btn" style="background-color: #321a75; color: #fff;">Add</button>
           <a class="btn btn-warning" href="/project/member/<%= result.projectid %>" role="button">Back</a>
         </div>
       </div>
@@ -58,4 +62,4 @@
 </div>
 </div>
 
-<%- include("../partials/_footer") %>
+<%- include("../../partials/_footer") %>
