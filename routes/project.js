@@ -89,6 +89,7 @@ module.exports = (pool) => {
                 dataUser: data.rows.map(item => item),
                 dataProject: projectData.rows.map(item => item),
                 projectMessage: req.flash('projectMessage'),
+                permissionMessage: req.flash('permissionMessage'),
                 option: dataOption.rows[0].optionproject
               })
             })
@@ -211,7 +212,7 @@ module.exports = (pool) => {
   })
 
   // to delete project 
-  router.get('/delete/:projectid', helpers.isLoggedIn, (req, res, next) => {
+  router.get('/delete/:projectid', helpers.isLoggedIn, helpers.isAdmin, (req, res, next) => {
     const projectid = req.params.projectid;
     let sqlDeleteProject = `DELETE FROM members WHERE projectid=${projectid};
     DELETE FROM projects WHERE projectid=${projectid};
@@ -459,7 +460,7 @@ module.exports = (pool) => {
   })
 
   // for deleting member at member page
-  router.get('/member/:projectid/delete/:memberid', helpers.isLoggedIn, (req, res, next) => {
+  router.get('/member/:projectid/delete/:memberid', helpers.isLoggedIn, helpers.isAdmin, (req, res, next) => {
     const {projectid, memberid} = req.params
 
     let sqlDelete = `DELETE FROM members WHERE projectid=${projectid} AND id=${memberid}`
@@ -534,7 +535,8 @@ module.exports = (pool) => {
               query: req.query,
               projectid,
               option: optionissue.rows[0].optionissues,
-              moment
+              moment,
+              projectMessage: req.flash("projectMessage")
             })
           })
         })
@@ -719,7 +721,7 @@ module.exports = (pool) => {
   })
 
   // delete issue - not finish
-  router.get('/issues/:projectid/delete/:issueid', helpers.isLoggedIn, (req, res, next) => {
+  router.get('/issues/:projectid/delete/:issueid', helpers.isLoggedIn, helpers.isAdmin, (req, res, next) => {
     const { projectid, issueid } = req.params;
     const user = req.session.user
     let sql1 = `SELECT * FROM issues WHERE issueid=${issueid}`

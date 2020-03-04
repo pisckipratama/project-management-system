@@ -6,7 +6,7 @@ const helpers = require('../helpers/util')
 
 module.exports = pool => {
   // main page, filtering data/table, and showing data
-  router.get('/', helpers.isLoggedIn, (req, res, next) => {
+  router.get('/', helpers.isLoggedIn, helpers.isAdmin, (req, res, next) => {
     let user = req.session.user;
     let sql = `SELECT users.userid, users.email, CONCAT(users.firstname,' ',users.lastname) AS name, users.position, users.isfulltime FROM users`;
 
@@ -97,14 +97,15 @@ module.exports = pool => {
             page: parseInt(page),
             link,
             query: req.query,
-            option: dataOption.rows[0].option
+            option: dataOption.rows[0].option,
+            permissionMessage: req.flash('permissionMessage')
           });
         })
       })
     })
   });
 
-  router.post('/', helpers.isLoggedIn, (req, res, next) => {
+  router.post('/', helpers.isLoggedIn, helpers.isAdmin, (req, res, next) => {
     let user = req.session.user;
     let sqlEditOption = `UPDATE users SET option='${JSON.stringify(req.body)}' WHERE userid=${user.userid}`;
 
@@ -115,17 +116,18 @@ module.exports = pool => {
   })
 
   // route to add data page
-  router.get('/add', helpers.isLoggedIn, (req, res, next) => {
+  router.get('/add', helpers.isLoggedIn, helpers.isAdmin, (req, res, next) => {
     let user = req.session.user;
     res.render('users/add', {
       title: "PMS Dashboard",
       url: "users",
-      user
+      user,
+      permissionMessage: req.flash('permissionMessage')
     })
   })
 
   // post data
-  router.post('/add', helpers.isLoggedIn, (req, res, next) => {
+  router.post('/add', helpers.isLoggedIn, helpers.isAdmin, (req, res, next) => {
     const user = req.session.user
     const {
       password,
@@ -146,7 +148,7 @@ module.exports = pool => {
   })
 
   // get user by id for editing
-  router.get('/edit/:userid', helpers.isLoggedIn, (req, res, next) => {
+  router.get('/edit/:userid', helpers.isLoggedIn, helpers.isAdmin, (req, res, next) => {
     const user = req.session.user;
     const {
       userid
@@ -165,7 +167,7 @@ module.exports = pool => {
   })
 
   // post edit user
-  router.post('/edit/:userid', helpers.isLoggedIn, (req, res, next) => {
+  router.post('/edit/:userid', helpers.isLoggedIn, helpers.isAdmin, (req, res, next) => {
     let sql = '';
     const {
       userid
@@ -195,7 +197,7 @@ module.exports = pool => {
     })
   })
 
-  router.get('/delete/:userid', helpers.isLoggedIn, (req, res, next) => {
+  router.get('/delete/:userid', helpers.isLoggedIn, helpers.isAdmin, (req, res, next) => {
     const user = req.session.user
     const {
       userid

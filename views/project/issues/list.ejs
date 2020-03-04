@@ -8,6 +8,14 @@
   <div class="container-fluid">
     <h3>Filter</h3>
     <form method="GET">
+      <% if (projectMessage.length > 0) {%>
+      <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <%= projectMessage %>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <% } %>
       <input type="hidden" name="page" value="1">
       <div class="form-group row">
         <label for="inputID" class="col-sm-2 col-form-label"> <input id="inputID" type="checkbox" name="checkID">

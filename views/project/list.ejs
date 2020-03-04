@@ -4,7 +4,14 @@
   <br>
   <h2>Projects</h2>
   <hr>
-
+  <% if (permissionMessage.length > 0) {%>
+  <div class="alert alert-warning alert-dismissible fade show" role="alert">
+    <strong>Cannot Access: </strong> <%= permissionMessage %>.
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <% } %>
   <div class="container">
     <h3>Filters</h3>
     <form id="form-filter" method="GET">
