@@ -85,7 +85,6 @@ module.exports = (pool) => {
             let sqlGetOption = `SELECT optionproject FROM users WHERE userid=${req.session.user.userid}`;
             pool.query(sqlGetOption, (err, dataOption) => {
               if (err) res.status(500).json(err);
-              console.log(req.session.user)
               res.render('project/list', {
                 title: 'PMS Dashboard',
                 url: 'project',
@@ -697,9 +696,6 @@ module.exports = (pool) => {
       let sqlAddActivity = `INSERT INTO activity (time, title, description,projectid, author) VALUES (NOW(), 'Issue Updated', '[${status}] [${tracker}] ${subject} - Done: ${done}%', ${projectid}, '${user.firstname} ${user.lastname}')`
       pool.query(sqlEditIssue, err => {
         if (err) res.status(500).json(err)
-        
-        console.log(sqlEditIssue)
-        console.log(sqlAddActivity)
         pool.query(sqlAddActivity, err => {
           if (err) res.status(500).json(err)
           res.redirect(`/project/issues/${projectid}`)
@@ -739,7 +735,6 @@ module.exports = (pool) => {
       let result = data.rows[0]
 
       let sql2 = `INSERT INTO activity (time, title, description,projectid, author) VALUES (NOW(), 'Issue Deleted', '[${result.status}] [${result.tracker}] ${result.subject} - Done: ${result.done}%', ${projectid}, '${user.firstname} ${user.lastname}')`
-      console.log(sql2)
       pool.query(sql2, err => {
         if (err) res.status(500).json(err)
 
