@@ -3,23 +3,16 @@ const express = require('express');
 const router = express.Router();
 const moment = require('moment')
 const path = require('path');
-moment.locale('id')
+const helpers = require('../helpers/util')
 
-// cofigure middleware for session
-const isLoggedIn = (req, res, next) => {
-  if (req.session.user) {
-    next()
-  } else {
-    res.redirect('/')
-  }
-}
+moment.locale('id')
 
 module.exports = (pool) => {
 
   // *** project page (main page) *** //
 
   // to landing main page, filter data projects, and pagination
-  router.get('/', isLoggedIn, function (req, res, next) {
+  router.get('/', helpers.isLoggedIn, (req, res, next) => {
     const {checkID, checkName, checkMember, inputID, inputName, inputMember} = req.query;
     const link = (req.url == '/') ? '/?page=1' : req.url;
     const page = req.query.page || 1;
@@ -106,7 +99,7 @@ module.exports = (pool) => {
   });
   
   // for option table
-  router.post("/option", isLoggedIn, (req, res, next) => {
+  router.post("/option", helpers.isLoggedIn, (req, res, next) => {
     const user = req.session.user;
     let sqlUpdateOption = `UPDATE users SET optionproject='${JSON.stringify(req.body)}' WHERE userid=${user.userid}`;
     
@@ -117,7 +110,7 @@ module.exports = (pool) => {
   })
 
   // to add project page
-  router.get('/add', isLoggedIn, function (req, res, next) {
+  router.get('/add', helpers.isLoggedIn, (req, res, next) => {
     const sqlAdd1 = `SELECT * FROM users ORDER BY userid`;
     pool.query(sqlAdd1, (err, data) => {
       if (err) res.status(500).json(err);
@@ -134,7 +127,7 @@ module.exports = (pool) => {
   });
 
   // to post add project
-  router.post('/add', isLoggedIn, function (req, res, next) {
+  router.post('/add', helpers.isLoggedIn, (req, res, next) => {
     const { name, member } = req.body;
     if (name && member) {
       const insertId = `INSERT INTO projects (name) VALUES ('${name}')`
@@ -165,7 +158,7 @@ module.exports = (pool) => {
   });
 
   // edit project landing page
-  router.get('/edit/:projectid', isLoggedIn, (req, res, next) => {
+  router.get('/edit/:projectid', helpers.isLoggedIn, (req, res, next) => {
     const projectid = req.params.projectid;
     let sqlEditProject = `SELECT members.userid, projects.name, projects.projectid FROM members LEFT JOIN projects ON projects.projectid = members.projectid WHERE projects.projectid = ${projectid}`;
     let sqlEditUser = `SELECT * FROM users`;
@@ -188,7 +181,7 @@ module.exports = (pool) => {
   })
 
   // to post edit project
-  router.post('/edit/:projectid', isLoggedIn, (req, res, next) => {
+  router.post('/edit/:projectid', helpers.isLoggedIn, (req, res, next) => {
     const {projectid} = req.params;
     const {editProject, editMember} = req.body;
 
@@ -218,7 +211,7 @@ module.exports = (pool) => {
   })
 
   // to delete project 
-  router.get('/delete/:projectid', isLoggedIn, (req, res, next) => {
+  router.get('/delete/:projectid', helpers.isLoggedIn, (req, res, next) => {
     const projectid = req.params.projectid;
     let sqlDeleteProject = `DELETE FROM members WHERE projectid=${projectid};
     DELETE FROM projects WHERE projectid=${projectid};
@@ -233,7 +226,7 @@ module.exports = (pool) => {
   // *** overview page *** //
 
   // to landing overview page
-  router.get('/overview/:projectid', isLoggedIn, (req, res, next) => {
+  router.get('/overview/:projectid', helpers.isLoggedIn, (req, res, next) => {
     const {projectid} = req.params;
     const user = req.session.user;
     
@@ -306,7 +299,7 @@ module.exports = (pool) => {
   // *** member page *** //
 
   // to landing member page
-  router.get('/member/:projectid', isLoggedIn, (req, res, next) => {
+  router.get('/member/:projectid', helpers.isLoggedIn, (req, res, next) => {
     const {projectid} = req.params;
     const user = req.session.user;
     
@@ -377,7 +370,7 @@ module.exports = (pool) => {
   })
 
   // post option at member page
-  router.post('/member/:projectid', isLoggedIn, (req, res, next) => {
+  router.post('/member/:projectid', helpers.isLoggedIn, (req, res, next) => {
     const user = req.session.user
     const {projectid} = req.params;
     let sqlUpdateOption = `UPDATE users SET optionmember='${JSON.stringify(req.body)}' WHERE userid=${user.userid}`;
@@ -389,7 +382,7 @@ module.exports = (pool) => {
   })
 
   // landing to add member page at member page
-  router.get('/member/:projectid/add', isLoggedIn, (req, res, next) => {
+  router.get('/member/:projectid/add', helpers.isLoggedIn, (req, res, next) => {
     const user = req.session.user;
     const {projectid} = req.params;
     let sqlShow = `SELECT * FROM projects WHERE projectid=${projectid}`
@@ -418,7 +411,7 @@ module.exports = (pool) => {
   })
 
   // to post add member at member page
-  router.post('/member/:projectid/add', isLoggedIn, (req, res, next) => {
+  router.post('/member/:projectid/add', helpers.isLoggedIn, (req, res, next) => {
     const {projectid} = req.params
     let data = [req.body.inputMember, req.body.inputPosition];
     
@@ -430,7 +423,7 @@ module.exports = (pool) => {
   })
 
   // landing to edit page at member page
-  router.get('/member/:projectid/edit/:memberid', isLoggedIn, (req, res, next) => {
+  router.get('/member/:projectid/edit/:memberid', helpers.isLoggedIn, (req, res, next) => {
     const {projectid, memberid} = req.params;
     const user = req.session.user
     let sqlShow = `SELECT * FROM projects WHERE projectid=${projectid}`
@@ -454,7 +447,7 @@ module.exports = (pool) => {
   })
 
   // to post edit member page
-  router.post('/member/:projectid/edit/:memberid', isLoggedIn, (req, res, next) => {
+  router.post('/member/:projectid/edit/:memberid', helpers.isLoggedIn, (req, res, next) => {
     const {projectid, memberid} = req.params;
     let data = [req.body.inputPosition, memberid]
 
@@ -466,7 +459,7 @@ module.exports = (pool) => {
   })
 
   // for deleting member at member page
-  router.get('/member/:projectid/delete/:memberid', isLoggedIn, (req, res, next) => {
+  router.get('/member/:projectid/delete/:memberid', helpers.isLoggedIn, (req, res, next) => {
     const {projectid, memberid} = req.params
 
     let sqlDelete = `DELETE FROM members WHERE projectid=${projectid} AND id=${memberid}`
@@ -479,7 +472,7 @@ module.exports = (pool) => {
   // *** issue page *** //
 
   // for landing to issues page
-  router.get('/issues/:projectid', isLoggedIn, (req, res, next) => {
+  router.get('/issues/:projectid', helpers.isLoggedIn, (req, res, next) => {
     const {projectid} = req.params
     const user = req.session.user
     const {checkID, inputID, checkSubject, inputSubject, checkTracker, inputTracker} = req.query;
@@ -550,7 +543,7 @@ module.exports = (pool) => {
   })
 
   // for option column issues page
-  router.post('/issues/:projectid', (req, res, next) => {
+  router.post('/issues/:projectid', helpers.isLoggedIn, (req, res, next) => {
     const {projectid} = req.params
     const user = req.session.user
 
@@ -562,7 +555,7 @@ module.exports = (pool) => {
   })
 
   // lading page to add issue
-  router.get('/issues/:projectid/add', isLoggedIn, (req, res, next) => {
+  router.get('/issues/:projectid/add', helpers.isLoggedIn, (req, res, next) => {
     const {projectid} = req.params;
     const user = req.session.user
 
@@ -588,7 +581,7 @@ module.exports = (pool) => {
   })
 
   // posting data to issues
-  router.post('/issues/:projectid/add', isLoggedIn, (req, res, next) => {
+  router.post('/issues/:projectid/add', helpers.isLoggedIn, (req, res, next) => {
     const {projectid} = req.params
     const user = req.session.user;
     const {
@@ -634,7 +627,7 @@ module.exports = (pool) => {
   })
 
   // landing to edit issue page
-  router.get('/issues/:projectid/edit/:issueid', isLoggedIn, (req, res, next) => {
+  router.get('/issues/:projectid/edit/:issueid', helpers.isLoggedIn, (req, res, next) => {
     const { projectid, issueid } = req.params
     const user = req.session.user;
 
@@ -665,7 +658,7 @@ module.exports = (pool) => {
   })
   
   // posting edit issue - not finish
-  router.post('/issues/:projectid/edit/:issueid', isLoggedIn, (req, res, next) => {
+  router.post('/issues/:projectid/edit/:issueid', helpers.isLoggedIn, (req, res, next) => {
     const { projectid, issueid } = req.params
     const user = req.session.user;
     const { 
@@ -726,7 +719,7 @@ module.exports = (pool) => {
   })
 
   // delete issue - not finish
-  router.get('/issues/:projectid/delete/:issueid', isLoggedIn, (req, res, next) => {
+  router.get('/issues/:projectid/delete/:issueid', helpers.isLoggedIn, (req, res, next) => {
     const { projectid, issueid } = req.params;
     const user = req.session.user
     let sql1 = `SELECT * FROM issues WHERE issueid=${issueid}`
@@ -748,7 +741,7 @@ module.exports = (pool) => {
   })
 
   // *** activity page *** //
-  router.get('/activity/:projectid', isLoggedIn, (req, res, next) => {
+  router.get('/activity/:projectid', helpers.isLoggedIn, (req, res, next) => {
     const {projectid} = req.params
     const user = req.session.user
 

@@ -3,19 +3,12 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcrypt')
 const saltRounds = 10;
-
-const isLoggedIn = (req, res, next) => {
-  if (req.session.user) {
-    next()
-  } else {
-    res.redirect('/')
-  }
-}
+const helpers = require('../helpers/util')
 
 module.exports = (pool) => {
 
   // edit profile user
-  router.get('/', isLoggedIn, (req, res, next) => {
+  router.get('/', helpers.isLoggedIn, (req, res, next) => {
     // console.log(req.headers.host)
     // const id = req.params.id;
     let user = req.session.user;
@@ -36,7 +29,7 @@ module.exports = (pool) => {
   });
 
   // to update profile user
-  router.post('/', isLoggedIn, (req, res, next) => {
+  router.post('/', helpers.isLoggedIn, (req, res, next) => {
     const {
       inputEmail,
       inputPassword,
