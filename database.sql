@@ -130,3 +130,6 @@ SELECT * , (SELECT CONCAT(firstname, ' ', lastname) AS author
 FROM users
 WHERE userid = activity.author AND projectid = 13) 
 FROM activity WHERE projectid = 13 ORDER BY activityid DESC
+
+-- for show activity
+-- SELECT (time AT TIME ZONE 'Asia/Jakarta' AT TIME ZONE 'asia/jakarta')::DATE dateactivity, (time AT TIME ZONE 'Asia/Jakarta' AT time zone 'asia/jakarta')::time timeactivity, title, description, author FROM activity WHERE projectid = 23
