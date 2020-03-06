@@ -22,7 +22,7 @@ module.exports = pool => {
     let sqlLoad = `SELECT * FROM users WHERE email='${email}'`;
     pool.query(sqlLoad, (err, data) => {
       if (err) res.status(500).send(err)
-      let result = data.rows[0]
+      let result = data.rows.length == 0 ? data.rows : data.rows[0]
       let hashpassword = result.password;
       
       bcrypt.compare(password, hashpassword, (err, valid) => {
@@ -37,7 +37,7 @@ module.exports = pool => {
             return res.redirect('/')
           }
         }
-        req.flash('loginMessage', 'wrong or username not found.')
+        req.flash('loginMessage', 'username wrong or not found.')
         res.redirect('/')
       })
     })
