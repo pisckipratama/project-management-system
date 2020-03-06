@@ -133,3 +133,13 @@ FROM activity WHERE projectid = 13 ORDER BY activityid DESC
 
 -- for show activity
 -- SELECT (time AT TIME ZONE 'Asia/Jakarta' AT TIME ZONE 'asia/jakarta')::DATE dateactivity, (time AT TIME ZONE 'Asia/Jakarta' AT time zone 'asia/jakarta')::time timeactivity, title, description, author FROM activity WHERE projectid = 23
+
+-- for get parent task
+SELECT issues.issueid
+FROM issues WHERE projectid=23 AND issueid=22
+
+SELECT issues.issueid, subject
+FROM issues
+WHERE issueid NOT IN (SELECT issues.issueid
+FROM issues
+WHERE projectid=23 AND issueid=22)
