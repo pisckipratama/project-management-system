@@ -153,7 +153,7 @@
         <div class="col-sm-2">
           <div class="form-check">
             <input class="form-check-input" type="checkbox" id="chkcreatedate" name="chkcreatedate" value="true"
-              <%= option.chkspent ? 'checked' : '' %>>
+              <%= option.chkcreatedate ? 'checked' : '' %>>
             <label class="form-check-label" for="chkcreatedate">Created Date</label>
           </div>
           <div class="form-check">
@@ -168,7 +168,7 @@
           </div>
           <div class="form-check">
             <input type="checkbox" class="form-check-input" id="chkparenttask" name="chkparenttask" value="true"
-              <%= option.chkclosedate ? 'checked' : '' %>>
+              <%= option.chkparenttask ? 'checked' : '' %>>
             <label class="form-check-label" for="chkparenttask">Parent Task</label>
           </div>
         </div>
@@ -196,7 +196,7 @@
             <th scope="col" <%= option.chkduedate ? '' : 'hidden' %>>Due Date</th>
             <th scope="col" <%= option.chkestimated ? '' : 'hidden' %>>Estimated Time (hours)</th>
             <th scope="col" <%= option.chkdone ? '' : 'hidden' %>>Done (%)</th>
-            <th scope="col" <%= option.chkdone ? '' : 'hidden' %>>File</th>
+            <th scope="col" <%= option.chkfile ? '' : 'hidden' %>>File</th>
             <th scope="col" <%= option.chkspent ? '' : 'hidden' %>>Spent Time (Hours)</th>
             <th scope="col" <%= option.chktargetversion ? '' : 'hidden' %>>Target Version</th>
             <th scope="col" <%= option.chkauthor ? '' : 'hidden' %>>Author</th>
@@ -221,20 +221,20 @@
             <td <%= option.chkduedate ? '' : 'hidden' %>><%= moment(item.duedate).format('LL') %></td>
             <td <%= option.chkestimated ? '' : 'hidden' %>><%= item.estimatedate %></td>
             <td <%= option.chkdone ? '' : 'hidden' %>><%= item.done %>%</td>
-            <td>
+            <td <%= option.chkfile ? '' : 'hidden' %>>
               <a href="/pictures/<%= item.files %>">
                 <img src="/pictures/<%= item.files %>" alt="" srcset="" width="80px">
               </a>
             </td>
-            <td <%= option.chkauthor ? '' : 'hidden' %>><%= item.spenttime %></td>
-            <td <%= option.chkauthor ? '' : 'hidden' %>><%= item.targetversion %></td>
+            <td <%= option.chkspent ? '' : 'hidden' %>><%= item.spenttime %></td>
+            <td <%= option.chktargetversion ? '' : 'hidden' %>><%= item.targetversion %></td>
             <td <%= option.chkauthor ? '' : 'hidden' %>><%= item.authorname %></td>
-            <td <%= option.chkauthor ? '' : 'hidden' %>><%= moment(item.createdate).format('LL') %></td>
-            <td <%= option.chkauthor ? '' : 'hidden' %>><%= moment(item.updatedate).format('LL') %></td>
-            <td <%= option.chkauthor ? '' : 'hidden' %>>
+            <td <%= option.chkcreatedate ? '' : 'hidden' %>><%= moment(item.createdate).format('LL') %></td>
+            <td <%= option.chkupdatedate? '' : 'hidden' %>><%= moment(item.updatedate).format('LL') %></td>
+            <td <%= option.chkclosedate ? '' : 'hidden' %>>
               <%= moment(item.closedate).format('LL') == 'Invalid date' ? '-' : moment(item.closedate).format('LL') %>
             </td>
-            <td <%= option.chkauthor ? '' : 'hidden' %>><%= item.namaparentissue %></td>
+            <td <%= option.chkparenttask ? '' : 'hidden' %>><%= item.namaparentissue %></td>
             <td>
               <a class="btn btn-info btn-sm" href="/project/issues/<%= result.projectid %>/edit/<%= item.issueid %>"
                 role="button">Edit</a>
