@@ -33,7 +33,7 @@
 
   <style>
     body {
-      font-family: 'Calibri', sans-serif;
+      font-family: 'Lato', sans-serif;
     }
 
     .bd-placeholder-img {
@@ -44,7 +44,7 @@
       -ms-user-select: none;
       user-select: none;
     }
-    
+
     @media (min-width: 768px) {
       .bd-placeholder-img-lg {
         font-size: 3.5rem;
@@ -55,7 +55,37 @@
   <link href="/stylesheets/signin.css" rel="stylesheet">
 </head>
 
+
+
 <body class="text-center">
+
+  <!-- Modal -->
+  <div class="modal fade" id="staticBackdrop" data-backdrop="static" tabindex="-1" role="dialog"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="staticBackdropLabel">Credential Demo Account</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body text-left">
+          <strong>Admin User</strong> <br>
+          Email Address &emsp; : admin@bulk.com <br>
+          Password&emsp; &emsp; &emsp;: nopassword <br>
+          <br>
+          <strong>Guest User</strong> <br>
+          Email Address &emsp; : guest@bulk.com <br>
+          Password&emsp; &emsp; &emsp;: nopassword
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-success" data-dismiss="modal">OK</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <form class="form-signin" action="" method="POST">
     <% if (loginMessage.length > 0) {%>
     <div class="alert alert-danger" role="alert">
@@ -75,12 +105,28 @@
       </label>
     </div>
     <button class="btn btn-lg btn-block" type="submit" style="background-color: #321a75; color: #fff;">Sign in</button>
+    <button type="button" class="btn btn-info btn-block btn-sm" data-toggle="modal" data-target="#staticBackdrop">
+      Credential Demo Account
+    </button>
+
+
+
     <p class="mt-5 mb-3 text-muted">
       Made with <i class="fa fa-heart-o"></i> by <a href="https://www.linkedin.com/in/pisckipratama"
         target="_blank">Piscki Pratama</a>
     </p>
   </form>
 
+
+  <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+    integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+    integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous">
+  </script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+    integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous">
+  </script>
 
 </body>
 
