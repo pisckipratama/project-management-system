@@ -16,7 +16,8 @@
               <legend class="col-form-label col-sm-2 pt-0">Tracker</legend>
               <div class="col-sm-10">
                 <div class="form-check">
-                  <input class="form-check-input" type="radio" name="tracker" id="gridRadios1" value="bug" <%= data.tracker == 'bug' ? 'checked' : '' %>>
+                  <input class="form-check-input" type="radio" name="tracker" id="gridRadios1" value="bug"
+                    <%= data.tracker == 'bug' ? 'checked' : '' %>>
                   <label class="form-check-label" for="gridRadios1">
                     Bug
                   </label>
@@ -49,7 +50,8 @@
           <div class="form-group row">
             <label for="inputdesc" class="col-sm-2 col-form-label">Description</label>
             <div class="col-sm-10">
-              <textarea class="form-control" id="inputdesc" name="description" rows="3" value="hehehe"> <%= data.description %> </textarea>
+              <textarea class="form-control" id="inputdesc" name="description" rows="3"
+                value="hehehe"> <%= data.description %> </textarea>
             </div>
           </div>
 
@@ -58,7 +60,8 @@
               <legend class="col-form-label col-sm-2 pt-0">Status</legend>
               <div class="col-sm-10">
                 <div class="form-check">
-                  <input class="form-check-input" type="radio" name="status" id="new" value="New" <%= data.status == 'New' ? 'checked' : '' %> >
+                  <input class="form-check-input" type="radio" name="status" id="new" value="New"
+                    <%= data.status == 'New' ? 'checked' : '' %>>
                   <label class="form-check-label" for="new">
                     New
                   </label>
@@ -107,7 +110,8 @@
               <legend class="col-form-label col-sm-2 pt-0">Priority</legend>
               <div class="col-sm-10">
                 <div class="form-check">
-                  <input class="form-check-input" type="radio" name="priority" id="normal" value="Normal" <%= data.priority == 'Normal' ? 'checked' : '' %> >
+                  <input class="form-check-input" type="radio" name="priority" id="normal" value="Normal"
+                    <%= data.priority == 'Normal' ? 'checked' : '' %>>
                   <label class="form-check-label" for="normal">
                     Normal
                   </label>
@@ -144,7 +148,8 @@
               <select class="custom-select" name="assignee" id="inputAssignee" required>
                 <option value="">Choose Member</option>
                 <% user.forEach(item => { %>
-                <option value="<%= item.userid %>" <%= item.userid == data.assignee ? 'selected' : '' %> ><%= item.fullname %> </option>
+                <option value="<%= item.userid %>" <%= item.userid == data.assignee ? 'selected' : '' %>>
+                  <%= item.fullname %> </option>
                 <% }) %>
               </select>
             </div>
@@ -153,21 +158,24 @@
           <div class="form-group row">
             <label for="startDate" class="col-sm-2 col-form-label">Start Date</label>
             <div class="col-sm-10">
-              <input type="date" class="form-control" name="startdate" id="startDate" value="<%= moment(data.startdate).format('YYYY-MM-DD') %>">
+              <input type="date" class="form-control" name="startdate" id="startDate"
+                value="<%= moment(data.startdate).format('YYYY-MM-DD') %>" readonly>
             </div>
           </div>
 
           <div class="form-group row">
             <label for="dueDate" class="col-sm-2 col-form-label">Due Date</label>
             <div class="col-sm-10">
-              <input type="date" class="form-control" name="duedate" id="dueDate" value="<%= moment(data.duedate).format('YYYY-MM-DD') %>" >
+              <input type="date" class="form-control" name="duedate" id="dueDate"
+                value="<%= moment(data.duedate).format('YYYY-MM-DD') %>">
             </div>
           </div>
 
           <div class="form-group row">
             <label for="inputEstimate" class="col-sm-2 col-form-label">Estimated Time (Hours)</label>
             <div class="col-sm-10">
-              <input type="number" class="form-control" id="inputEstimate" name="estimatedtime" value="<%= data.estimatedate %>">
+              <input type="number" class="form-control" id="inputEstimate" name="estimatedtime"
+                value="<%= data.estimatedate %>" readonly>
             </div>
           </div>
 
@@ -188,14 +196,18 @@
             <label for="inputFiles" class="col-sm-2 col-form-label">File</label>
             <div class="col-sm-10">
               <input type="file" class="form-control-file" name="sampleFile" id="inputFiles">
-              <%= data.files %>
+              <br>
+              <a href="/pictures/<%= data.files %>">
+                <img src="/pictures/<%= data.files %>" alt="" srcset="" height="120px" width="120px">
+              </a>
             </div>
           </div>
 
           <div class="form-group row">
             <label for="inputspent" class="col-sm-2 col-form-label">Spent Time</label>
             <div class="col-sm-10">
-              <input type="number" class="form-control" id="inputspent" name="spenttime" value="<%= data.spenttime %>" required>
+              <input type="number" class="form-control" id="inputspent" name="spenttime" value="<%= data.spenttime %>"
+                required>
             </div>
           </div>
 
