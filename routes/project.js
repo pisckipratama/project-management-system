@@ -643,16 +643,25 @@ module.exports = (pool) => {
         if (err) res.status(500).json(err)
         pool.query(sqlShowUser, (err, dataUser) => {
           if (err) res.status(500).json(err)
-          res.render('project/issues/edit', {
-            user,
-            title: 'PMS Dashboard',
-            url: 'project',
-            url2: 'issues',
-            result: data.rows[0],
-            projectid,
-            moment,
-            user: dataUser.rows,
-            data: dataIssue.rows[0]
+          const subquery = `SELECT issues.issueid FROM issues WHERE projectid=${projectid} AND issueid=${issueid}`;
+          let sqlparent = `SELECT issues.issueid, subject FROM issues WHERE issueid NOT IN (${subquery})`;
+
+          pool.query(sqlparent, (err, dataParent) => {
+            if (err) res.status(500).json(err)
+            let forParent = dataParent.rows.map(item => item)
+            console.log(forParent)
+            res.render('project/issues/edit', {
+              user,
+              title: 'PMS Dashboard',
+              url: 'project',
+              url2: 'issues',
+              result: data.rows[0],
+              projectid,
+              moment,
+              user: dataUser.rows,
+              data: dataIssue.rows[0],
+              forParent
+            })
           })
         })
       })

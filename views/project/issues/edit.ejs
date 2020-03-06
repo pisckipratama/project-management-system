@@ -219,9 +219,15 @@
           </div>
 
           <div class="form-group row">
-            <label for="inputparenttask" class="col-sm-2 col-form-label">Parent Task</label>
+            <label for="inputparenttask" class="col-sm-2 col-form-label">
+              Parent Task</label>
             <div class="col-sm-10">
-              <input type="text" class="form-control" id="inputparenttask" name="parenttask" value="23">
+              <select class="custom-select" name="parenttask" id="inputparenttask" required>
+                <option value="">Choose Parent Task</option>
+                <% forParent.forEach(item => { %>
+                <option value="<%= item.issueid %>"><%= item.subject %> </option>
+                <% }) %>
+              </select>
             </div>
           </div>
 
