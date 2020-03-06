@@ -692,9 +692,9 @@ module.exports = (pool) => {
 
     if (!req.files || Object.keys(req.files).length === 0) {
       if (status == 'Closed') {
-        sqlEditIssue = `UPDATE issues SET tracker='${tracker}', subject='${subject}', description='${description}', status='${status}', priority='${priority}', startdate='${startdate}', duedate='${duedate}', estimatedate='${estimatedtime}', done=${done}, spenttime='${spenttime}', targetversion='${targetversion}', updatedate = now(), closedate = now(), assignee=${assignee} WHERE issueid=${issueid}`
+        sqlEditIssue = `UPDATE issues SET tracker='${tracker}', subject='${subject}', description='${description}', status='${status}', priority='${priority}', startdate='${startdate}', duedate='${duedate}', estimatedate='${estimatedtime}', done=${done}, spenttime='${spenttime}', targetversion='${targetversion}', updatedate = now(), closedate = now(), assignee=${assignee}, parenttask=${parenttask} WHERE issueid=${issueid}`
       } else {
-        sqlEditIssue = `UPDATE issues SET tracker='${tracker}', subject='${subject}', description='${description}', status='${status}', priority='${priority}', startdate='${startdate}', duedate='${duedate}', estimatedate='${estimatedtime}', done=${done}, spenttime='${spenttime}', targetversion='${targetversion}', updatedate = now(), assignee=${assignee} WHERE issueid=${issueid}`
+        sqlEditIssue = `UPDATE issues SET tracker='${tracker}', subject='${subject}', description='${description}', status='${status}', priority='${priority}', startdate='${startdate}', duedate='${duedate}', estimatedate='${estimatedtime}', done=${done}, spenttime='${spenttime}', targetversion='${targetversion}', updatedate = now(), assignee=${assignee}, parenttask=${parenttask} WHERE issueid=${issueid}`
       }
     
       let sqlAddActivity = `INSERT INTO activity (time, title, description,projectid, author) VALUES (NOW(), 'Issue Updated', '[${status}] [${tracker}] ${subject} - Done: ${done}%', ${projectid}, '${user.firstname} ${user.lastname}')`

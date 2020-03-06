@@ -225,7 +225,7 @@
               <select class="custom-select" name="parenttask" id="inputparenttask" required>
                 <option value="">Choose Parent Task</option>
                 <% forParent.forEach(item => { %>
-                <option value="<%= item.issueid %>"><%= item.subject %> </option>
+                <option value="<%= item.issueid %>" <%= item.issueid == data.parenttask ? "selected" : "" %>><%= item.subject %> </option>
                 <% }) %>
               </select>
             </div>

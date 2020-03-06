@@ -234,7 +234,7 @@
             <td <%= option.chkauthor ? '' : 'hidden' %>>
               <%= moment(item.closedate).format('LL') == 'Invalid date' ? '-' : moment(item.closedate).format('LL') %>
             </td>
-            <td <%= option.chkauthor ? '' : 'hidden' %>><%= item.parenttask %></td>
+            <td <%= option.chkauthor ? '' : 'hidden' %>><%= item.namaparentissue %></td>
             <td>
               <a class="btn btn-info btn-sm" href="/project/issues/<%= result.projectid %>/edit/<%= item.issueid %>"
                 role="button">Edit</a>
