@@ -14,10 +14,15 @@ module.exports = pool => {
 
     bcrypt.hash("nopassword", saltRounds, (err, hash) => {
       if (err) res.status(500).json(err);
-      res.render('login', {
-        title: 'PMS Dashboard',
-        loginMessage: req.flash('loginMessage')
-      });
+      let sql = `INSERT INTO users (email, password, firstname, lastname, position, isfulltime, option, optionproject, optionmember, optionissues, isadmin) VALUES('admin@demo.dev', '${hash}', 'Super', 'User', 'Manager', true, '{"chkid":"true","chkname":"true","chkposition":"true"}', '{"chkid":"true","chkname":"true","chkmember":"true"}', '{"chkid":"true","chkname":"true","chkposition":"true"}', '{"chkid":"true","chktracker":"true","chksubject":"true","chkdesc":"true","chkstat":"true","chkpriority":"true","chkassignee":"true","chkstartdate":"true","chkduedate":"true","chkestimated":"true","chkdone":"true","chkauthor":"true","chkspent":"true","chkfile":"true","chktargetversion":"true","chkcreatedate":"true","chkupdatedate":"true","chkclosedate":"true","chkparenttask":"true"}', true) ON CONFLICT (email) DO NOTHING;
+    INSERT INTO users(email, password, firstname, lastname, position, isfulltime, option, optionproject, optionmember, optionissues, isadmin) VALUES('guest@demo.dev', '${hash}', 'Guest', 'User', 'Software Developer', false, '{"chkid":"true","chkname":"true","chkposition":"true"}', '{"chkid":"true","chkname":"true","chkmember":"true"}', '{"chkid":"true","chkname":"true","chkposition":"true"}', '{"chkid":"true","chktracker":"true","chksubject":"true","chkdesc":"true","chkstat":"true","chkpriority":"true","chkassignee":"true","chkstartdate":"true","chkduedate":"true","chkestimated":"true","chkdone":"true","chkauthor":"true","chkspent":"true","chkfile":"true","chktargetversion":"true","chkcreatedate":"true","chkupdatedate":"true","chkclosedate":"true","chkparenttask":"true"}', false) ON CONFLICT(email) DO NOTHING `
+      pool.query(sql, (err, data) => {
+        if (err) res.status(500).json(err);
+        res.render('login', {
+          title: 'PMS Dashboard',
+          loginMessage: req.flash('loginMessage')
+        });
+      })
     })
   });
 
