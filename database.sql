@@ -143,3 +143,8 @@ FROM issues
 WHERE issueid NOT IN (SELECT issues.issueid
 FROM issues
 WHERE projectid=23 AND issueid=22)
+
+-- query for insert unique email
+CREATE UNIQUE INDEX users_email_key
+ON users(email);
+-- INSERT INTO users (email, password, firstname, lastname, position, isfulltime, option, optionproject, optionmember, optionissues, isadmin) VALUES('admin@demo.dev','nopassword', 'Super', 'User', 'Manager', 'true', '{"chkid":"true","chkname":"true","chkposition":"true"}', '{"chkid":"true","chkname":"true","chkmember":"true"}', '{"chkid":"true","chkname":"true","chkposition":"true"}', '{"chkid":"true","chktracker":"true","chksubject":"true","chkdesc":"true","chkstat":"true","chkpriority":"true","chkassignee":"true","chkstartdate":"true","chkduedate":"true","chkestimated":"true","chkdone":"true","chkauthor":"true","chkspent":"true","chkfile":"true","chktargetversion":"true","chkcreatedate":"true","chkupdatedate":"true","chkclosedate":"true","chkparenttask":"true"}', true) ON CONFLICT (email) DO NOTHING;`
