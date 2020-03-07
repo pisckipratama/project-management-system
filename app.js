@@ -12,7 +12,9 @@ const fileUpload = require('express-fileupload');
 const app = express();
 
 // config database
-const { Pool } = require('pg');
+const {
+  Pool
+} = require('pg');
 const pool = new Pool({
   user: 'pisckipy',
   host: 'localhost',
@@ -40,8 +42,11 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.set('trust proxy', 1) // trust first proxy
 app.use(session({
-  secret: 'aplikasiaingkumahaaing'
+  secret: 'aplikasiaingkumahaaing',
+  resave: true,
+  saveUninitialized: true
 }))
+
 app.use(flash());
 app.use(fileUpload());
 app.use(function (req, res, next) {
