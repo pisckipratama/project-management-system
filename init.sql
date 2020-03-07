@@ -5,18 +5,25 @@ CREATE TABLE users
   email VARCHAR(30) UNIQUE,
   password VARCHAR(100),
   firstname VARCHAR(30),
-  lastame VARCHAR(30)
+  lastame VARCHAR(30),
+  position character varying(20),
+  isfulltime boolean,
+  -- option json,
+  optionproject json,
+  optionmember json,
+  optionissues json,
+  isadmin boolean
 );
 
--- ** table project **
+-- table project 
 CREATE TABLE projects
 (
   projectid SERIAL PRIMARY KEY,
-  name VARCHAR(100)
+  name VARCHAR(100),
+  -- option json
 );
 
--- ** table members **
-
+-- table member
 CREATE TABLE members
 (
   id SERIAL PRIMARY KEY,
@@ -27,8 +34,7 @@ CREATE TABLE members
   FOREIGN KEY (projectid) REFERENCES projects(projectid)
 );
 
--- ** table issues **
-
+-- table issues
 CREATE TABLE issues
 (
   issueid SERIAL PRIMARY KEY,
@@ -52,8 +58,9 @@ CREATE TABLE issues
   updatedate TIMESTAMP,
   closedate TIMESTAMP,
   parenttask INT,
-  FOREIGN KEY (userid) REFERENCES users(userid),
-  FOREIGN KEY (projectid) REFERENCES projects(projectid)
+  -- option json,
+  -- FOREIGN KEY (userid) REFERENCES users(userid),
+  -- FOREIGN KEY (projectid) REFERENCES projects(projectid)
 );
 
 -- ** table activity **
