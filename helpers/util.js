@@ -15,6 +15,15 @@ const helpers = {
       req.flash('permissionMessage', 'Permission Denied')
       res.redirect("/project")
     }
+  },
+
+  isMemberOne: (req, res, next) => {
+    if (data.length > 1) {
+      next()
+    } else {
+      req.flash('permissionMessage', 'Permission Denied')
+      res.redirect(`/project/member/${projectid}`)
+    }
   }
 }
 

@@ -108,7 +108,7 @@
           <td>
             <a class="btn btn-info btn-sm" href="/project/member/<%= result.projectid %>/edit/<%= item.id %>" role="button">Edit</a>
             <% if (user.isadmin) { %>
-            <a class="btn btn-danger btn-sm delete"
+            <a class="btn btn-danger btn-sm delete <%= data.length == 1 ? 'disabled' : '' %>"
               onclick="return confirm('Are you sure you want to delete this item?');"
               href="/project/member/<%= result.projectid %>/delete/<%= item.id %>">Delete</a>
             <% } %>

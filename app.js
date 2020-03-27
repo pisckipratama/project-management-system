@@ -16,10 +16,15 @@ const {
   Pool
 } = require('pg');
 const pool = new Pool({
-  user: 'dxlblartphicig',
-  host: 'ec2-184-72-235-159.compute-1.amazonaws.com',
-  database: 'd1ug1odop9lvlb',
-  password: 'eb440f324f150a51c51d4eef1fecacc3aae40d74e03ced20636ac76ea0805011',
+  // user: 'dxlblartphicig',
+  // host: 'ec2-184-72-235-159.compute-1.amazonaws.com',
+  // database: 'd1ug1odop9lvlb',
+  // password: 'eb440f324f150a51c51d4eef1fecacc3aae40d74e03ced20636ac76ea0805011',
+  // port: 5432
+  user: 'pisckipy',
+  host: 'localhost',
+  database: 'pms',
+  password: 'Bismillah',
   port: 5432
 })
 console.log("successfull connect to the database")
